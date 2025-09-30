@@ -50,13 +50,9 @@ const Bundles = ({
             <div
               key={index}
               onClick={() => onSelectQuantity?.(discount.quantity)}
-              className={cn(
-                "relative rounded-lg p-4 transition-all cursor-pointer hover:shadow-md",
-                isSelected ? "ring-2" : "border-2"
-              )}
+              className="relative rounded-lg p-4 border-2 transition-all cursor-pointer hover:shadow-md"
               style={{
-                borderColor: isSelected ? colorBorder : "#e5e7eb",
-                ...(isSelected && { "--tw-ring-color": colorBorder } as React.CSSProperties),
+                borderColor: colorBorder,
               }}
             >
               {discount.default && (
@@ -103,8 +99,8 @@ const Bundles = ({
 
                 <div
                   className={cn(
-                    "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
-                    isSelected ? "border-transparent" : "border-muted-foreground"
+                    "w-6 h-6 rounded-full flex items-center justify-center transition-all",
+                    isSelected ? "" : "border-2 border-muted-foreground"
                   )}
                   style={{
                     backgroundColor: isSelected ? colorBorder : "transparent",
