@@ -70,49 +70,45 @@ const Bundles = ({
                 </div>
               )}
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div
+                  className={cn(
+                    "w-5 h-5 rounded-full flex items-center justify-center transition-all flex-shrink-0",
+                    isSelected ? "border-[6px]" : "border-2 border-gray-300"
+                  )}
+                  style={{
+                    borderColor: isSelected ? colorBorder : "#d1d5db",
+                  }}
+                />
+
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-lg font-bold text-foreground">
                       {discount.name || `${discount.quantity} Unidad${discount.quantity > 1 ? "es" : ""}`}
                     </span>
-                    {discountPercentage > 0 && (
-                      <span
-                        className="text-sm font-bold px-2 py-0.5 rounded"
-                        style={{ backgroundColor: colorDiscount, color: "#fff" }}
-                      >
-                        -{discountPercentage}%
-                      </span>
-                    )}
                   </div>
                   <p className="text-sm text-muted-foreground mb-2">
                     {discount.subtitle}
                   </p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-sm text-muted-foreground line-through">
+                </div>
+
+                <div className="text-right">
+                  {discountPercentage > 0 && (
+                    <span
+                      className="text-xs font-bold px-2 py-0.5 rounded inline-block mb-1"
+                      style={{ backgroundColor: colorDiscount, color: "#fff" }}
+                    >
+                      -{discountPercentage}%
+                    </span>
+                  )}
+                  <div className="flex flex-col items-end">
+                    <span className="text-sm text-red-500 line-through">
                       ${discount.priceOriginal}
                     </span>
-                    <span className="text-2xl font-bold" style={{ color: colorDiscount }}>
+                    <span className="text-xl font-bold text-foreground">
                       ${discount.priceFinal}
                     </span>
                   </div>
-                  {discount.labelText && (
-                    <p className="text-xs font-medium mt-2" style={{ color: colorDiscount }}>
-                      {discount.labelText}
-                    </p>
-                  )}
-                </div>
-
-                <div
-                  className={cn(
-                    "w-6 h-6 rounded-full flex items-center justify-center transition-all",
-                    isSelected ? "" : "border-2 border-muted-foreground"
-                  )}
-                  style={{
-                    backgroundColor: isSelected ? colorBorder : "transparent",
-                  }}
-                >
-                  {isSelected && <Check className="w-4 h-4 text-white" />}
                 </div>
               </div>
             </div>
