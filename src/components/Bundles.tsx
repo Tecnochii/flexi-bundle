@@ -50,9 +50,15 @@ const Bundles = ({
             <div
               key={index}
               onClick={() => onSelectQuantity?.(discount.quantity)}
-              className="relative rounded-lg p-4 border-2 transition-all cursor-pointer hover:shadow-md"
+              className={cn(
+                "relative rounded-lg p-4 transition-all cursor-pointer hover:shadow-md",
+                isSelected ? "border-2 ring-2 ring-offset-2" : "border-2"
+              )}
               style={{
-                borderColor: colorBorder,
+                borderColor: isSelected ? colorBorder : "#e5e7eb",
+                ...(isSelected && { 
+                  boxShadow: `0 0 0 3px ${colorBorder}20`
+                }),
               }}
             >
               {discount.default && (
