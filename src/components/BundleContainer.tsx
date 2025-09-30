@@ -341,7 +341,6 @@ const BundleContainer = () => {
                   colorDiscount={discountColor}
                   labelBackgroundColor={labelBackgroundColor}
                   onSelectQuantity={setSelectedQuantity}
-                  selectedQuantity={selectedQuantity}
                 />
               </CardContent>
             </Card>
