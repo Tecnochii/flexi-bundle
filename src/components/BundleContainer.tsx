@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Bundles from "./Bundles";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -7,15 +7,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 import { Trash2, Plus } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { log } from "console";
+import BotonVolver from "./BotonVolver";
+import BotonLogout from "./BotonLogout";
 
 interface Discount {
   label: string;
   quantity: number;
   subtitle: string;
-  priceOriginal: string;
-  priceFinal: string;
+  priceoriginal: string;
+  pricefinal: string;
   default?: boolean;
-  labelText: string;
+  labeltext: string;
   name?: string;
 }
 
@@ -25,46 +28,29 @@ const BundleContainer = () => {
       label: "MAS COMPRADO",
       quantity: 1,
       subtitle: "3 cuotas sin interés",
-      priceOriginal: "71.999,00",
-      priceFinal: "44.999,00",
-      labelText: "Envio gratis",
+      priceoriginal: "71.999,00",
+      pricefinal: "44.999,00",
+      labeltext: "Envio gratis",
       name: "1 Unidad",
-    },
-    {
-      label: "MAS COMPRADO",
-      quantity: 2,
-      subtitle: "3 cuotas sin interés",
-      priceOriginal: "143.998,00",
-      priceFinal: "76.498,30",
-      default: true,
-      labelText: "Envio gratis",
-      name: "2 Unidades",
-    },
-    {
-      label: "MAS COMPRADO",
-      quantity: 3,
-      subtitle: "3 cuotas sin interés",
-      priceOriginal: "215.997,00",
-      priceFinal: "101.247,75",
-      labelText: "Envio gratis",
-      name: "3 Unidades",
-    },
+    }
+ 
+    
   ]);
 
   const [form, setForm] = useState<Discount>({
     label: "",
     quantity: 1,
     subtitle: "3 cuotas sin interés",
-    priceOriginal: "",
-    priceFinal: "",
+    priceoriginal: "",
+    pricefinal: "",
     default: false,
-    labelText: "Envio gratis",
+    labeltext: "Envio gratis",
     name: "1 Unidad",
   });
 
-  const [borderColor, setBorderColor] = useState("#3b82f6");
-  const [discountColor, setDiscountColor] = useState("#ef4444");
-  const [labelBackgroundColor, setLabelBackgroundColor] = useState("#fbbf24");
+  const [borderColor, setBorderColor] = useState("");
+  const [discountColor, setDiscountColor] = useState("");
+  const [labelBackgroundColor, setLabelBackgroundColor] = useState("");
   const [bundleTitle, setBundleTitle] = useState("¡GANÁ comprando POR CANTIDAD!");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [selectedQuantity, setSelectedQuantity] = useState(2);
@@ -87,10 +73,10 @@ const BundleContainer = () => {
       label: "",
       quantity: 1,
       subtitle: "3 cuotas sin interés",
-      priceOriginal: "",
-      priceFinal: "",
+      priceoriginal: "",
+      pricefinal: "",
       default: false,
-      labelText: "Envio gratis",
+      labeltext: "Envio gratis",
       name: "1 Unidad",
     });
   };
@@ -103,8 +89,79 @@ const BundleContainer = () => {
     }
   };
 
+
+  const [products, setProducts] = useState(discounts);
+
+
+function obtenerCookie(nombre) {
+    // 1. Prepara el nombre a buscar (asegura el signo = al final)
+    const nombreBuscado = nombre + "=";
+
+    // 2. Decodifica la cadena completa de cookies para manejar caracteres especiales
+    //    y la divide en un array de cookies individuales
+    const cookiesArray = decodeURIComponent(document.cookie).split(';');
+
+    // 3. Itera sobre cada elemento (cookie) en el array
+    for(let i = 0; i < cookiesArray.length; i++) {
+        let cookie = cookiesArray[i];
+
+        // 4. Elimina los espacios en blanco iniciales (del separador '; ')
+        while (cookie.charAt(0) === ' ') {
+            cookie = cookie.substring(1);
+        }
+
+        // 5. Comprueba si el elemento actual comienza con el nombre buscado
+        if (cookie.indexOf(nombreBuscado) === 0) {
+            // 6. Si coincide, devuelve el valor (la parte que sigue a nombreBuscado)
+            return cookie.substring(nombreBuscado.length, cookie.length);
+        }
+    }
+
+    // 7. Si el bucle termina sin encontrar la cookie, devuelve null
+    return null;
+}
+
+useEffect(() => {
+    let access_token =  obtenerCookie('access_token');
+    console.log(access_token);
+    
+
+    let param = new URLSearchParams(window.location.search);
+    let product_id = param.get('id');
+    console.log(product_id);
+
+
+   if(access_token){
+    let urlLoginTest = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token="+access_token+"&product_id="+product_id;
+      fetch(urlLoginTest, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    setBorderColor(data[0].product.color_border);
+    setLabelBackgroundColor(data[0].product.background_label_color);
+    setDiscountColor(data[0].product.color_discount);
+    setBundleTitle(data[0].product.bundle_title);
+    setDiscounts(data[0].ofertas);
+
+  })
+ 
+    
+   }
+},[])
+
+
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
+      <div className="flex justify-between">
+
+<BotonVolver />
+      <BotonLogout />
+      </div>
+      
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -131,6 +188,8 @@ const BundleContainer = () => {
                   <div className="space-y-2">
                     <Label htmlFor="label">Label</Label>
                     <Input
+                    required
+
                       id="label"
                       value={form.label}
                       onChange={(e) => handleChange("label", e.target.value)}
@@ -142,6 +201,8 @@ const BundleContainer = () => {
                     <Label htmlFor="name">Nombre</Label>
                     <Input
                       id="name"
+                    required
+
                       value={form.name}
                       onChange={(e) => handleChange("name", e.target.value)}
                       placeholder="1 Unidad"
@@ -151,6 +212,8 @@ const BundleContainer = () => {
                   <div className="space-y-2">
                     <Label htmlFor="quantity">Cantidad</Label>
                     <Input
+                    required
+
                       id="quantity"
                       type="number"
                       min="1"
@@ -162,6 +225,7 @@ const BundleContainer = () => {
                   <div className="space-y-2">
                     <Label htmlFor="subtitle">Subtítulo</Label>
                     <Input
+
                       id="subtitle"
                       value={form.subtitle}
                       onChange={(e) => handleChange("subtitle", e.target.value)}
@@ -170,31 +234,35 @@ const BundleContainer = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="priceOriginal">Precio Original</Label>
+                    <Label htmlFor="priceoriginal">Precio Original</Label>
                     <Input
-                      id="priceOriginal"
-                      value={form.priceOriginal}
-                      onChange={(e) => handleChange("priceOriginal", e.target.value)}
+                    required
+
+                      id="priceoriginal"
+                      value={form.priceoriginal}
+                      onChange={(e) => handleChange("priceoriginal", e.target.value)}
                       placeholder="71.999,00"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="priceFinal">Precio Final</Label>
+                    <Label htmlFor="pricefinal">Precio Final</Label>
                     <Input
-                      id="priceFinal"
-                      value={form.priceFinal}
-                      onChange={(e) => handleChange("priceFinal", e.target.value)}
+                    required
+                      id="pricefinal"
+                      value={form.pricefinal}
+                      onChange={(e) => handleChange("pricefinal", e.target.value)}
                       placeholder="44.999,00"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="labelText">Texto de Etiqueta</Label>
+                    <Label htmlFor="labeltext">Texto de Etiqueta</Label>
                     <Input
-                      id="labelText"
-                      value={form.labelText}
-                      onChange={(e) => handleChange("labelText", e.target.value)}
+
+                      id="labeltext"
+                      value={form.labeltext}
+                      onChange={(e) => handleChange("labeltext", e.target.value)}
                       placeholder="Envio gratis"
                     />
                   </div>
@@ -237,7 +305,7 @@ const BundleContainer = () => {
                     <SelectContent>
                       {discounts.map((d, i) => (
                         <SelectItem key={i} value={i.toString()}>
-                          {`Opción ${i + 1}: x${d.quantity} - $${d.priceFinal}`}
+                          {`Opción ${i + 1}: x${d.quantity} - $${d.pricefinal}`}
                         </SelectItem>
                       ))}
                     </SelectContent>

@@ -1,9 +1,16 @@
-import BundleContainer from "@/components/BundleContainer";
-import { log } from "console";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import TablaProductos from '@/components/TablaProductos';
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
-const Index = () => {
+function BundlesList() {
+
+  const productos = [
+  
+  ];
+
+
+  const [products, setProducts] = React.useState(productos);
+
 
 function obtenerCookie(nombre) {
     // 1. Prepara el nombre a buscar (asegura el signo = al final)
@@ -36,14 +43,15 @@ function obtenerCookie(nombre) {
 let navigate =useNavigate();
 
 
+
   useEffect(() => {
 
-
+    
    let access_token =  obtenerCookie('access_token');
     console.log(access_token);
     
    if(access_token){
-    let urlLoginTest = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/verify?access_token="+access_token;
+    let urlLoginTest = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/products?access_token="+access_token;
       fetch(urlLoginTest, {
     method: "GET",
     headers: {
@@ -51,18 +59,26 @@ let navigate =useNavigate();
     },
   }).then((response) => response.json())
   .then((data) => {
-    console.log(data);
+    console.log(data[0].productos);
+    setProducts(data[0].productos);
+
   })
-  .catch((error) => {
-    console.log(error);
-navigate('/login');
-  })
+ 
     
    }
+
+
+
   }, []);
 
 
-  return <BundleContainer />;
-};
 
-export default Index;
+  return (
+    <div className="min-h-screen flex justify-center bg-gray-100">
+      
+      <TablaProductos items={products} />
+    </div>
+  )
+}
+
+export default BundlesList

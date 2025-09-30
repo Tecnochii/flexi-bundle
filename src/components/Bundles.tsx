@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from './ui/button';
 
 interface Discount {
   label: string;
   quantity: number;
   subtitle: string;
-  priceOriginal: string;
-  priceFinal: string;
+  priceoriginal: string;
+  pricefinal: string;
   default?: boolean;
-  labelText: string;
+  labeltext: string;
   name?: string;
 }
 
@@ -106,8 +107,92 @@ const Bundles = ({
     };
 
 
+
+
+
+function obtenerCookie(nombre) {
+    // 1. Prepara el nombre a buscar (asegura el signo = al final)
+    const nombreBuscado = nombre + "=";
+
+    // 2. Decodifica la cadena completa de cookies para manejar caracteres especiales
+    //    y la divide en un array de cookies individuales
+    const cookiesArray = decodeURIComponent(document.cookie).split(';');
+
+    // 3. Itera sobre cada elemento (cookie) en el array
+    for(let i = 0; i < cookiesArray.length; i++) {
+        let cookie = cookiesArray[i];
+
+        // 4. Elimina los espacios en blanco iniciales (del separador '; ')
+        while (cookie.charAt(0) === ' ') {
+            cookie = cookie.substring(1);
+        }
+
+        // 5. Comprueba si el elemento actual comienza con el nombre buscado
+        if (cookie.indexOf(nombreBuscado) === 0) {
+            // 6. Si coincide, devuelve el valor (la parte que sigue a nombreBuscado)
+            return cookie.substring(nombreBuscado.length, cookie.length);
+        }
+    }
+
+    // 7. Si el bucle termina sin encontrar la cookie, devuelve null
+    return null;
+}
+
+
+
+    const handleApply = () => {
+
+
+ let access_token =  obtenerCookie('access_token');
+    console.log(access_token);
+    
+
+    let param = new URLSearchParams(window.location.search);
+    let product_id = param.get('id');
+    console.log(product_id);
+
+
+   if(access_token){
+    let urlLoginTest = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token="+access_token+"&product_id="+product_id;
+      fetch(urlLoginTest, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ofertas: discounts,
+    colors:{
+      border: colorBorder,
+      discount: colorDiscount,
+      label: labelBackgroundColor,
+    },
+    bundle_title: bundleTitle
+    
+
+    }),
+  }).then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    
+
+  })
+ 
+    
+   }
+
+
+        
+
+       
+    };
+
+
+
+
+
     // 4. Renderizado JSX con estilos y lógica integrada
     return (
+        <>
         <div className="emapps-discount-radio-group">
             {/* Estilos CSS dinámicos, adaptados del código original */}
             <style>{`
@@ -227,9 +312,9 @@ const Bundles = ({
                                             <div className="emapps-discount-radio-group-list-item-qty-info-unit">
                                                 {discount.name || `${discount.quantity} Unidad${discount.quantity > 1 ? 'es' : ''}`}
                                             </div>
-                                            {discount.labelText && (
+                                            {discount.labeltext && (
                                                 <p className="emapps-discount-radio-group-list-item-label-text">
-                                                    {discount.labelText}
+                                                    {discount.labeltext}
                                                 </p>
                                             )}
                                         </div>
@@ -242,10 +327,10 @@ const Bundles = ({
                                 </div>
                                 <div className="emapps-discount-radio-group-list-item-price-box">
                                     <div className="emapps-discount-radio-group-list-item-qty-price-de">
-                                        ${discount.priceOriginal}
+                                        ${discount.priceoriginal}
                                     </div>
                                     <div className="emapps-discount-radio-group-list-item-qty-price-por">
-                                        ${discount.priceFinal}
+                                        ${discount.pricefinal}
                                     </div>
                                 </div>
                             </div>
@@ -259,7 +344,18 @@ const Bundles = ({
                     );
                 })}
             </div>
+
+
+
+           
         </div>
+         <div className='flex justify-center'>
+
+
+                 <Button onClick={() => {handleApply()}} variant={"default"} className="w-80 mt-4 shadow-md">
+Aplicar Cambios                  </Button>
+            </div>
+            </>
     );
 };
 
