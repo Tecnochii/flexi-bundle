@@ -73,7 +73,7 @@ let navigate = useNavigate()
   const [bundleTitle, setBundleTitle] = useState("¡GANÁ comprando POR CANTIDAD!");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [selectedQuantity, setSelectedQuantity] = useState();
-
+const [variantsOn, setVariantsOn] = useState('false');
 
   // Función de utilidad para obtener cookie (mantener)
   function obtenerCookie(nombre: string) {
@@ -111,10 +111,23 @@ let navigate = useNavigate()
           setLabelBackgroundColor(data[0].product.background_label_color);
           setDiscountColor(data[0].product.color_discount);
           setBundleTitle(data[0].product.bundle_title);
-          
+          setVariantsOn(data[0].product.variants_on);
+
+
+           setForm({
+      ...form,
+      ["variants"]: data[0].product.variants_on,
+    });
+
+
           const fetchedDiscounts: Discount[] = data[0].ofertas;
           setDiscounts(fetchedDiscounts); 
 
+
+
+
+          console.log(data[0].product);
+          
           // 3. Lógica para seleccionar el default al cargar desde la API
           const defaultIndex = fetchedDiscounts.findIndex(d => d.default);
           if (defaultIndex !== -1) {
@@ -194,6 +207,10 @@ let navigate = useNavigate()
     setDiscounts(updatedDiscounts); // Guardar la lista final
     setForm(initialFormState); // Resetear formulario
     // 4. Seleccionar el elemento que acaba de ser creado/editado
+     setForm({
+      ...form,
+      ["variants"]: variantsOn,
+    });
     setSelectedIndex(targetIndex); 
   };
 
@@ -209,6 +226,11 @@ let navigate = useNavigate()
         setEditingIndex(null); 
         setForm(initialFormState); 
       }
+
+       setForm({
+      ...form,
+      ["variants"]: variantsOn,
+    });
     }
   };
 
@@ -217,6 +239,12 @@ let navigate = useNavigate()
       setEditingIndex(selectedIndex);
       setForm(discounts[selectedIndex]); 
     }
+
+    setForm({
+      ...form,
+      ["variants"]: variantsOn,
+    });
+
   };
   
   /**
@@ -329,7 +357,10 @@ let navigate = useNavigate()
                   {isEditing && (
                     <Button 
                       type="button" 
-                      onClick={() => { setEditingIndex(null); setForm(initialFormState); setSelectedIndex(null); }} 
+                      onClick={() => { setEditingIndex(null); setForm(initialFormState); setSelectedIndex(null);   setForm({
+      ...form,
+      ["variants"]: variantsOn,
+    });}} 
                       variant="outline" 
                       className="w-full mt-2"
                     >
@@ -410,8 +441,30 @@ let navigate = useNavigate()
                     </p>
                 )}
               </CardContent>
+              
             </Card>
-
+             <Card>
+              <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+               ⚙️ Tiene Variantes?
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                       <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="variants" 
+                      checked={form.variants} 
+                      onCheckedChange={(checked) => {
+                        handleChange("variants", checked === true);
+                        setVariantsOn (checked === true)
+                      }} 
+                    />
+                    <Label htmlFor="variants" className="cursor-pointer">
+                      (Marcar si el producto en tienda nube tiene uno o mas variantes)
+                    </Label>
+                  </div>
+              </CardContent>
+              </Card>   
 
             {/* Opciones Visuales Card (mantener) */}
             <Card>
@@ -471,6 +524,7 @@ let navigate = useNavigate()
                   colorDiscount={discountColor}
                   labelBackgroundColor={labelBackgroundColor}
                   onSelectQuantity={setSelectedQuantity}
+                  variantsOn={variantsOn}
                   // Aquí deberías pasar la cantidad del bundle seleccionado por defecto
                   // si Bundles necesita saber cuál está seleccionado inicialmente en la vista previa
                 />

@@ -170,6 +170,7 @@ const Bundles = ({
             label: labelBackgroundColor,
           },
           bundle_title: bundleTitle,
+          variants_on: variantsOn,
         }),
       })
         .then((response) => response.json())
