@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import logo from '../assets/logo.png';
 // Estilos básicos (Mantenidos)
 const estilos = {
   contenedor: {
@@ -238,7 +238,7 @@ navigate('/list');
 
     <>
     <div style={estilos.logoContainer}>
-      <img src="public/logo.png" style={estilos.imagen} alt="" />
+      <img src={logo} style={estilos.imagen} alt="" />
     </div>
     <div style={estilos.contenedor}>
       <h2 style={estilos.titulo}>{esLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}</h2>

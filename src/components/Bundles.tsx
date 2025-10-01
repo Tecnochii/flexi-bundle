@@ -33,6 +33,44 @@ const Bundles = ({
 }: BundlesProps) => {
   // Estado arranca en null
   const [selected, setSelected] = useState<number | null>(null);
+  // Nuevo estado para el contenido del textarea del script
+  const [scriptContent, setScriptContent] = useState('');
+
+  // Lógica de `obtenerCookie` (la mantendremos aquí por si se necesita)
+  function obtenerCookie(nombre: string) {
+    const nombreBuscado = nombre + '=';
+    const cookiesArray = decodeURIComponent(document.cookie).split(';');
+    for (let i = 0; i < cookiesArray.length; i++) {
+      let cookie = cookiesArray[i];
+      while (cookie.charAt(0) === ' ') {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(nombreBuscado) === 0) {
+        return cookie.substring(nombreBuscado.length, cookie.length);
+      }
+    }
+    return null;
+  }
+
+  // Effect para obtener el 'id' del query param y generar el script
+  useEffect(() => {
+    // Es importante que este código se ejecute en el navegador
+    if (typeof window !== 'undefined') {
+      const param = new URLSearchParams(window.location.search);
+      const product_id = param.get('id');
+      
+      const scriptBase = '<script src="https://n8n-n8n.qxzsxx.easypanel.host/webhook/merchant?product=';
+      const scriptEnd = '">';
+
+      if (product_id) {
+        // Genera el script con el product_id
+        setScriptContent(scriptBase + product_id + scriptEnd);
+      } else {
+        // Opción si no se encuentra el ID
+        setScriptContent(scriptBase + 'ID_NO_ENCONTRADO' + scriptEnd);
+      }
+    }
+  }, []); // El array vacío asegura que solo se ejecute al montar
 
   // Cuando cambian los descuentos, seleccionar el default o el primero
   useEffect(() => {
@@ -106,21 +144,6 @@ const Bundles = ({
   const handleSelect = (index: number) => {
     setSelected(index);
   };
-
-  function obtenerCookie(nombre: string) {
-    const nombreBuscado = nombre + '=';
-    const cookiesArray = decodeURIComponent(document.cookie).split(';');
-    for (let i = 0; i < cookiesArray.length; i++) {
-      let cookie = cookiesArray[i];
-      while (cookie.charAt(0) === ' ') {
-        cookie = cookie.substring(1);
-      }
-      if (cookie.indexOf(nombreBuscado) === 0) {
-        return cookie.substring(nombreBuscado.length, cookie.length);
-      }
-    }
-    return null;
-  }
 
   const handleApply = () => {
     let access_token = obtenerCookie('access_token');
@@ -311,6 +334,19 @@ const Bundles = ({
         >
           Aplicar Cambios
         </Button>
+      </div>
+      <div>
+        <h5 style={{ fontWeight: 'bold', marginTop: '20px' }}>Script del Producto:</h5>
+        <textarea 
+          name="product-script" 
+          id="product-script" 
+          rows={3}
+          readOnly
+          value={scriptContent} // **Usamos el estado aquí**
+          style={{ width: '100%', padding: '10px', fontSize: '14px', border: '1px solid #ccc', borderRadius: '4px' }}
+        >
+        </textarea>
+        <p style={{ marginTop: '10px' }} className='text-gray-500'>* Esto tiene que ser pegado en la descripcion del producto</p>
       </div>
     </>
   );
