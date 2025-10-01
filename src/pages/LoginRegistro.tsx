@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Estilos básicos (Mantenidos)
@@ -6,6 +6,7 @@ const estilos = {
   contenedor: {
     maxWidth: '400px',
     margin: '50px auto',
+    marginTop: '0px',
     padding: '20px',
     border: '1px solid #ccc',
     borderRadius: '8px',
@@ -48,6 +49,13 @@ const estilos = {
     textDecoration: 'none',
     cursor: 'pointer',
     marginLeft: '5px',
+  },
+  imagen:{
+    width: "20rem"
+  },
+  logoContainer:{
+    display: "flex",
+    justifyContent: "center",
   }
 };
 
@@ -163,7 +171,75 @@ const LoginRegistro = () => {
     setWeb(''); // Limpiar el campo web
   };
 
+
+
+
+
+function obtenerCookie(nombre) {
+    // 1. Prepara el nombre a buscar (asegura el signo = al final)
+    const nombreBuscado = nombre + "=";
+
+    // 2. Decodifica la cadena completa de cookies para manejar caracteres especiales
+    //    y la divide en un array de cookies individuales
+    const cookiesArray = decodeURIComponent(document.cookie).split(';');
+
+    // 3. Itera sobre cada elemento (cookie) en el array
+    for(let i = 0; i < cookiesArray.length; i++) {
+        let cookie = cookiesArray[i];
+
+        // 4. Elimina los espacios en blanco iniciales (del separador '; ')
+        while (cookie.charAt(0) === ' ') {
+            cookie = cookie.substring(1);
+        }
+
+        // 5. Comprueba si el elemento actual comienza con el nombre buscado
+        if (cookie.indexOf(nombreBuscado) === 0) {
+            // 6. Si coincide, devuelve el valor (la parte que sigue a nombreBuscado)
+            return cookie.substring(nombreBuscado.length, cookie.length);
+        }
+    }
+
+    // 7. Si el bucle termina sin encontrar la cookie, devuelve null
+    return null;
+}
+
+
+
+  useEffect(() => {
+
+
+   let access_token =  obtenerCookie('access_token');
+    console.log(access_token);
+    
+   if(access_token){
+    let urlLoginTest = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/verify?access_token="+access_token;
+      fetch(urlLoginTest, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.log(error);
+navigate('/list');
+  })
+    
+   }
+  }, []);
+
+
+
+
+
   return (
+
+    <>
+    <div style={estilos.logoContainer}>
+      <img src="public/logo.png" style={estilos.imagen} alt="" />
+    </div>
     <div style={estilos.contenedor}>
       <h2 style={estilos.titulo}>{esLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}</h2>
       
@@ -239,6 +315,7 @@ const LoginRegistro = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

@@ -63,8 +63,9 @@ let navigate =useNavigate();
     setProducts(data[0].productos);
 
   })
- 
     
+   }else{
+    navigate("/login")
    }
 
 

@@ -9,6 +9,7 @@ import { Trash2, Plus, Edit, ArrowUp, ArrowDown } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import BotonVolver from "./BotonVolver"; 
 import BotonLogout from "./BotonLogout"; 
+import { useNavigate } from "react-router-dom";
 
 interface Discount {
   label: string;
@@ -47,10 +48,20 @@ const initialDiscounts: Discount[] = [
   }
 ];
 
+
+
+
 // 1. Detección del índice predeterminado para el estado inicial
 const defaultIndex = initialDiscounts.findIndex(d => d.default);
 
 const BundleContainer = () => {
+
+
+let navigate = useNavigate()
+
+
+
+
   const [discounts, setDiscounts] = useState<Discount[]>(initialDiscounts);
   // 2. Inicializar selectedIndex con el índice predeterminado detectado (o null)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(defaultIndex !== -1 ? defaultIndex : null);
@@ -117,7 +128,9 @@ const BundleContainer = () => {
         }
       })
       .catch(error => console.error("Error fetching data:", error));
-    }
+    }else{
+    navigate("/login")
+   }
   }, []);
 
 
