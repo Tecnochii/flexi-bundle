@@ -145,8 +145,8 @@ const TablaProductos: React.FC<TablaProductosProps> = ({ items }) => {
                 <th className="px-3 py-2 border text-left">Product TN ID</th>
                 <th className="px-3 py-2 border text-left">Usuario</th>
                 <th className="px-3 py-2 border text-left">Color Borde</th>
-                <th className="px-3 py-2 border text-left">Color Descuento</th>
-                <th className="px-3 py-2 border text-left">Fondo Label</th>
+                <th className="px-3 py-2 border text-left">Color Precio Despues</th>
+                <th className="px-3 py-2 border text-left">Color Etiquetas</th>
                 <th className="px-3 py-2 border text-left">Título Bundle</th>
                 <th className="px-3 py-2 border text-left">Variantes</th>
               </tr>

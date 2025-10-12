@@ -54,7 +54,7 @@ const ModalNuevoProducto: React.FC<ModalProps> = ({
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     <div>
-                        <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">Nombre</label>
+                        <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">Nombre del Bundle</label>
                         <input
                             id="nombre"
                             name="nombre"
@@ -67,47 +67,9 @@ const ModalNuevoProducto: React.FC<ModalProps> = ({
                         />
                     </div>
 
-                    <div>
-                        <label htmlFor="product_tn_id" className="block text-sm font-medium text-gray-700">Product TN ID</label>
-                        <input
-                            id="product_tn_id"
-                            name="product_tn_id"
-                            type="number"
-                            value={nuevoProductoData.product_tn_id}
-                            onChange={onFormChange}
-                            required
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                        />
-                    </div>
+              
 
-                    <div className="grid grid-cols-3 gap-4">
-                        {/* Mapeo de inputs de color y texto */}
-                        {["color_border", "color_discount", "background_label_color"].map((key) => (
-                            <div key={key}>
-                                <label htmlFor={key} className="block text-sm font-medium text-gray-700 capitalize">
-                                    {key.replace(/_/g, " ")}
-                                </label>
-                                <div className="flex items-center mt-1">
-                                    <input
-                                        id={key}
-                                        name={key}
-                                        type="color"
-                                        value={nuevoProductoData[key as keyof NuevoProductoForm] as string}
-                                        onChange={onFormChange}
-                                        className="w-8 h-8 rounded-md"
-                                    />
-                                    <input
-                                        id={`${key}_text`}
-                                        name={key}
-                                        type="text"
-                                        value={nuevoProductoData[key as keyof NuevoProductoForm] as string}
-                                        onChange={onFormChange}
-                                        className="ml-2 block w-full border border-gray-300 rounded-md shadow-sm p-2 text-xs"
-                                    />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                   
 
                     <div>
                         <label htmlFor="bundle_title" className="block text-sm font-medium text-gray-700">Título Bundle</label>

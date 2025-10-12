@@ -242,6 +242,13 @@ const [variantsOn, setVariantsOn] = useState('false');
 
     setForm({
       ...form,
+      ["name"]: discounts[selectedIndex]?.name || "",
+      ["quantity"]: discounts[selectedIndex]?.quantity || 0,
+      ["label"]: discounts[selectedIndex]?.label || "",
+      ["subtitle"]: discounts[selectedIndex]?.subtitle || "",
+      ["priceoriginal"]: discounts[selectedIndex]?.priceoriginal || "",
+      ["pricefinal"]: discounts[selectedIndex]?.pricefinal || "",
+      ["labeltext"]: discounts[selectedIndex]?.labeltext || "",
       ["variants"]: variantsOn,
     });
 
@@ -305,17 +312,17 @@ const [variantsOn, setVariantsOn] = useState('false');
                   
                   {/* Campos del formulario */}
                   <div className="space-y-2">
-                    <Label htmlFor="label">Label</Label>
+                    <Label htmlFor="label">Etiqueta de oferta por defecto (Mas comprado!, Mas vendido!, etc)</Label>
                     <Input required id="label" value={form.label} onChange={(e) => handleChange("label", e.target.value)} placeholder="MAS COMPRADO" />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="name">Nombre</Label>
+                    <Label htmlFor="name">Titulo de oferta</Label>
                     <Input id="name" required value={form.name} onChange={(e) => handleChange("name", e.target.value)} placeholder="1 Unidad" />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="quantity">Cantidad</Label>
+                    <Label htmlFor="quantity">Cantidad (Lo que se va a añadir al carrito)</Label>
                     <Input required id="quantity" type="number" min="1" value={form.quantity} onChange={(e) => handleChange("quantity", Number(e.target.value))} />
                   </div>
 
@@ -325,17 +332,17 @@ const [variantsOn, setVariantsOn] = useState('false');
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="priceoriginal">Precio Original</Label>
+                    <Label htmlFor="priceoriginal">Precio Antes</Label>
                     <Input required id="priceoriginal" value={form.priceoriginal} onChange={(e) => handleChange("priceoriginal", e.target.value)} placeholder="71.999,00" />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="pricefinal">Precio Final</Label>
+                    <Label htmlFor="pricefinal">Precio Ahora</Label>
                     <Input required id="pricefinal" value={form.pricefinal} onChange={(e) => handleChange("pricefinal", e.target.value)} placeholder="44.999,00" />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="labeltext">Texto de Etiqueta</Label>
+                    <Label htmlFor="labeltext">Texto de Etiqueta Flotante (Envio gratis, Ahorra $10.000,00, etc)</Label>
                     <Input id="labeltext" value={form.labeltext} onChange={(e) => handleChange("labeltext", e.target.value)} placeholder="Envio gratis" />
                   </div>
 
@@ -473,7 +480,7 @@ const [variantsOn, setVariantsOn] = useState('false');
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="bundleTitle">Título del bundle</Label>
+                  <Label htmlFor="bundleTitle">Título de las ofertas</Label>
                   <Input
                     id="bundleTitle"
                     value={bundleTitle}
@@ -491,7 +498,7 @@ const [variantsOn, setVariantsOn] = useState('false');
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="discountColor">Descuento</Label>
+                    <Label htmlFor="discountColor">Precio antes</Label>
                     <div className="flex gap-2 items-center">
                       <input id="discountColor" type="color" value={discountColor} onChange={(e) => setDiscountColor(e.target.value)} className="w-12 h-10 rounded border cursor-pointer" />
                       <Input value={discountColor} onChange={(e) => setDiscountColor(e.target.value)} className="flex-1" />
@@ -499,7 +506,7 @@ const [variantsOn, setVariantsOn] = useState('false');
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="labelBg">Etiqueta</Label>
+                    <Label htmlFor="labelBg">Etiquetas</Label>
                     <div className="flex gap-2 items-center">
                       <input id="labelBg" type="color" value={labelBackgroundColor} onChange={(e) => setLabelBackgroundColor(e.target.value)} className="w-12 h-10 rounded border cursor-pointer" />
                       <Input value={labelBackgroundColor} onChange={(e) => setLabelBackgroundColor(e.target.value)} className="flex-1" />
