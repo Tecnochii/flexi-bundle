@@ -22,7 +22,7 @@ interface BundlesProps {
   onSelectQuantity?: (quantity: number) => void;
 }
 
-const Bundles = ({
+const Bundles1 = ({
   discounts = [],
   colorBorder = '#8c52ff',
   colorDiscount = '#8c52ff',
@@ -171,6 +171,7 @@ const Bundles = ({
           },
           bundle_title: bundleTitle,
           variants_on: variantsOn,
+          style:1
         }),
       })
         .then((response) => response.json())
@@ -353,4 +354,4 @@ const Bundles = ({
   );
 };
 
-export default Bundles;
+export default Bundles1;
