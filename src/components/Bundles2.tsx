@@ -172,7 +172,7 @@ const Bundles2 = ({
           .emapps-badge-top {
             position: absolute;
             top: -14px;
-            left: -2px;
+            left: -3px;
             width: 12.5rem;
             background: ${labelBackgroundColor};
             color: #fff;
