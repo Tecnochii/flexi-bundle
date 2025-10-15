@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LoginRegistro from "./pages/LoginRegistro";
 import BundlesList from "./pages/BundlesList";
+import Home from "./pages/Home";
 
 const queryClient = new QueryClient();
 
@@ -17,7 +18,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Home />} />
           <Route path="/generador" element={<Index />} />
           <Route path="/list" element={<BundlesList />} />
 
