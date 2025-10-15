@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from './ui/button';
+import React, { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 interface Discount {
   label: string;
@@ -24,25 +24,25 @@ interface BundlesProps {
 
 const Bundles1 = ({
   discounts = [],
-  colorBorder = '#8c52ff',
-  colorDiscount = '#8c52ff',
-  labelBackgroundColor = '#8c52ff',
-  bundleTitle = '¡GANÁ comprando POR CANTIDAD!',
-  variantsOn = 'false',
+  colorBorder = "#8c52ff",
+  colorDiscount = "#8c52ff",
+  labelBackgroundColor = "#8c52ff",
+  bundleTitle = "¡GANÁ comprando POR CANTIDAD!",
+  variantsOn = "false",
   onSelectQuantity,
 }: BundlesProps) => {
   // Estado arranca en null
   const [selected, setSelected] = useState<number | null>(null);
   // Nuevo estado para el contenido del textarea del script
-  const [scriptContent, setScriptContent] = useState('');
+  const [scriptContent, setScriptContent] = useState("");
 
   // Lógica de `obtenerCookie` (la mantendremos aquí por si se necesita)
   function obtenerCookie(nombre: string) {
-    const nombreBuscado = nombre + '=';
-    const cookiesArray = decodeURIComponent(document.cookie).split(';');
+    const nombreBuscado = nombre + "=";
+    const cookiesArray = decodeURIComponent(document.cookie).split(";");
     for (let i = 0; i < cookiesArray.length; i++) {
       let cookie = cookiesArray[i];
-      while (cookie.charAt(0) === ' ') {
+      while (cookie.charAt(0) === " ") {
         cookie = cookie.substring(1);
       }
       if (cookie.indexOf(nombreBuscado) === 0) {
@@ -55,11 +55,12 @@ const Bundles1 = ({
   // Effect para obtener el 'id' del query param y generar el script
   useEffect(() => {
     // Es importante que este código se ejecute en el navegador
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const param = new URLSearchParams(window.location.search);
-      const product_id = param.get('id');
-      
-      const scriptBase = '<script src="https://n8n-n8n.qxzsxx.easypanel.host/webhook/merchant?product=';
+      const product_id = param.get("id");
+
+      const scriptBase =
+        '<script src="https://n8n-n8n.qxzsxx.easypanel.host/webhook/merchant?product=';
       const scriptEnd = '">';
 
       if (product_id) {
@@ -67,7 +68,7 @@ const Bundles1 = ({
         setScriptContent(scriptBase + product_id + scriptEnd);
       } else {
         // Opción si no se encuentra el ID
-        setScriptContent(scriptBase + 'ID_NO_ENCONTRADO' + scriptEnd);
+        setScriptContent(scriptBase + "ID_NO_ENCONTRADO" + scriptEnd);
       }
     }
   }, []); // El array vacío asegura que solo se ejecute al montar
@@ -92,35 +93,37 @@ const Bundles1 = ({
     if (selected === null) return;
 
     const quantityInput = document.getElementsByClassName(
-      'js-quantity-input'
+      "js-quantity-input"
     )[0] as HTMLInputElement;
 
     if (quantityInput) {
       quantityInput.value = String(discounts[selected]?.quantity ?? 1);
     }
 
-    if (variantsOn === 'true' || variantsOn === true) {
+    if (variantsOn === "true" || variantsOn === true) {
       const variantgroups = document.getElementsByClassName(
-        'js-product-variants-group'
+        "js-product-variants-group"
       )[0] as HTMLElement;
 
       if (variantgroups) {
-        const selectvariant = variantgroups.children[1]?.children[3] as HTMLElement;
-        const selectvarianticon = variantgroups.children[1]?.children[5] as HTMLElement;
+        const selectvariant = variantgroups.children[1]
+          ?.children[3] as HTMLElement;
+        const selectvarianticon = variantgroups.children[1]
+          ?.children[5] as HTMLElement;
 
         if (selectvariant) {
-          selectvariant.style.width = '50%';
-          selectvariant.style.padding = '6px';
-          selectvariant.style.borderRadius = '6px';
+          selectvariant.style.width = "50%";
+          selectvariant.style.padding = "6px";
+          selectvariant.style.borderRadius = "6px";
         }
 
         if (selectvarianticon) {
-          selectvarianticon.style.position = 'absolute';
-          selectvarianticon.style.top = '4.4rem';
-          selectvarianticon.style.left = '9rem';
+          selectvarianticon.style.position = "absolute";
+          selectvarianticon.style.top = "4.4rem";
+          selectvarianticon.style.left = "9rem";
         }
 
-        variantgroups.style.display = 'none';
+        variantgroups.style.display = "none";
 
         const activeDiscountElement = document.getElementById(
           `emapps-bundle-${selected}`
@@ -146,21 +149,22 @@ const Bundles1 = ({
   };
 
   const handleApply = () => {
-    let access_token = obtenerCookie('access_token');
+    setLoading(true);
+    let access_token = obtenerCookie("access_token");
     let param = new URLSearchParams(window.location.search);
-    let product_id = param.get('id');
+    let product_id = param.get("id");
 
     if (access_token) {
       let urlLoginTest =
-        'https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token=' +
+        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token=" +
         access_token +
-        '&product_id=' +
+        "&product_id=" +
         product_id;
 
       fetch(urlLoginTest, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           ofertas: discounts,
@@ -171,15 +175,21 @@ const Bundles1 = ({
           },
           bundle_title: bundleTitle,
           variants_on: variantsOn,
-          style:1
+          style: 1,
         }),
       })
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   };
+
+  const [loading, setLoading] = useState(false);
+
 
   return (
     <>
@@ -272,7 +282,7 @@ const Bundles1 = ({
                 key={index}
                 id={`emapps-bundle-${index}`}
                 className={`emapps-discount-radio-group-list-item ${
-                  isActive ? 'emapps-discount-radio-group-list-item-active' : ''
+                  isActive ? "emapps-discount-radio-group-list-item-active" : ""
                 }`}
                 onClick={() => handleSelect(index)}
               >
@@ -286,11 +296,11 @@ const Bundles1 = ({
                       readOnly
                     />
                     <div className="emapps-discount-radio-group-list-item-info-container">
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div style={{ display: "flex", alignItems: "center" }}>
                         <div className="emapps-discount-radio-group-list-item-qty-info-unit">
                           {discount.name ||
                             `${discount.quantity} Unidad${
-                              discount.quantity > 1 ? 'es' : ''
+                              discount.quantity > 1 ? "es" : ""
                             }`}
                         </div>
                         {discount.labeltext && (
@@ -328,27 +338,62 @@ const Bundles1 = ({
       </div>
       <div className="flex justify-center">
         <Button
-          onClick={() => {
+        disabled={loading}
+          onClick={(e) => {
             handleApply();
+
           }}
-          variant={'default'}
+          variant={"default"}
           className="w-80 mt-4 shadow-md"
         >
-          Aplicar Cambios
+
+
+          {loading && (
+        <span
+          style={{
+            width: "16px",
+            height: "16px",
+            border: "2px solid white",
+            borderTopColor: "transparent",
+            borderRadius: "50%",
+            animation: "spin 0.8s linear infinite",
+          }}
+        />
+      )}
+      {loading ? "Aplicando..." : "Aplicar Cambios"}
+      <style>
+        {`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+
+
+          
         </Button>
       </div>
       <div>
-        <h5 style={{ fontWeight: 'bold', marginTop: '20px' }}>Script del Producto:</h5>
-        <textarea 
-          name="product-script" 
-          id="product-script" 
+        <h5 style={{ fontWeight: "bold", marginTop: "20px" }}>
+          Script del Producto:
+        </h5>
+        <textarea
+          name="product-script"
+          id="product-script"
           rows={3}
           readOnly
           value={scriptContent} // **Usamos el estado aquí**
-          style={{ width: '100%', padding: '10px', fontSize: '14px', border: '1px solid #ccc', borderRadius: '4px' }}
-        >
-        </textarea>
-        <p style={{ marginTop: '10px' }} className='text-gray-500'>* Esto tiene que ser pegado en la descripcion del producto</p>
+          style={{
+            width: "100%",
+            padding: "10px",
+            fontSize: "14px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+          }}
+        ></textarea>
+        <p style={{ marginTop: "10px" }} className="text-gray-500">
+          * Esto tiene que ser pegado en la descripcion del producto
+        </p>
       </div>
     </>
   );

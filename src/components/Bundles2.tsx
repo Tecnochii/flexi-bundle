@@ -77,6 +77,10 @@ const Bundles2 = ({
   const handleSelect = (index: number) => setSelected(index);
 
   const handleApply = () => {
+
+
+setLoading(true);
+
     let access_token = obtenerCookie('access_token');
     let param = new URLSearchParams(window.location.search);
     let product_id = param.get('id');
@@ -104,9 +108,17 @@ const Bundles2 = ({
         }),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then((data) => console.log(data))
+        .finally(() => setLoading(false));
+        
     }
   };
+
+
+  const [loading, setLoading] = useState(false);
+
+
+
 
   return (
     <>
@@ -264,11 +276,35 @@ const Bundles2 = ({
 
       <div className="flex justify-center">
         <Button
-          onClick={handleApply}
+                disabled={loading}
+
+          onClick={(e)=>{
+            handleApply()
+             
+          }}
           variant={'default'}
           className="w-80 mt-4 shadow-md"
         >
-          Aplicar Cambios
+             {loading && (
+        <span
+          style={{
+            width: "16px",
+            height: "16px",
+            border: "2px solid white",
+            borderTopColor: "transparent",
+            borderRadius: "50%",
+            animation: "spin 0.8s linear infinite",
+          }}
+        />
+      )}
+      {loading ? "Aplicando..." : "Aplicar Cambios"}
+      <style>
+        {`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}
+      </style>
         </Button>
       </div>
 
