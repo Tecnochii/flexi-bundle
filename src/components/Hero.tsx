@@ -1,8 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-bundles.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+
+
+  const navigate = useNavigate();
+
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background with gradient */}
@@ -41,13 +46,13 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in">
-            <Button variant="default" size="lg" className="text-base fon t-semibold">
+            <Button onClick={()=> navigate("/login")} variant="default" size="lg" className="text-base fon t-semibold">
               Comenzar gratis
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button variant="outline" size="lg" className="text-base font-semibold">
+            {/* <Button variant="outline" size="lg" className="text-base font-semibold">
               Ver demo
-            </Button>
+            </Button> */}
           </div>
 
           {/* Stats */}

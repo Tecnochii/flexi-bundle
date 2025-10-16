@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const CTA = () => {
+
+  const navigate = useNavigate();
+
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
@@ -35,7 +39,7 @@ const CTA = () => {
 
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Button variant="default" size="lg" className="text-base font-semibold">
+                <Button onClick={() => navigate("/login")} variant="default" size="lg" className="text-base font-semibold">
                   Crear mi primera oferta
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
