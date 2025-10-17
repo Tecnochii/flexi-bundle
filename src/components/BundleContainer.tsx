@@ -753,6 +753,11 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
 
             {/* Opciones De complemento Card (mantener) */}
 
+
+         
+
+
+
             {/* Opciones Visuales Card (mantener) */}
             <Card>
               <CardHeader>
