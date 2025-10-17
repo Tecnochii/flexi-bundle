@@ -32,7 +32,7 @@ const VideoSection = () => {
             {/* Replace the placeholder above with actual video embed like: */}
             <iframe
               className="absolute inset-0 w-full h-full"
-              src="https://www.youtube.com/embed/ZeOYJF6ifmI"
+              src="https://www.youtube.com/embed/bmJVmcCzw0A"
               title="TecnoBundles Demo"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

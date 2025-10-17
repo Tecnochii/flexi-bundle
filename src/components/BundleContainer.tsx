@@ -32,6 +32,15 @@ interface Discount {
   style:number;
 }
 
+
+
+interface Complement {
+  nameComplement: string;
+  urlProduct: string;
+  idTnProduct: string;
+  urlImageProduct: string;
+}
+
 // Valores iniciales por defecto para el formulario
 const initialFormState: Discount = {
   label: "",
@@ -42,6 +51,14 @@ const initialFormState: Discount = {
   default: false,
   labeltext: "Envio gratis",
   name: "",
+};
+
+
+const initialFormStateComplement: Complement = {
+  nameComplement: "",
+  urlProduct: "",
+  idTnProduct: "",
+  urlImageProduct: "",
 };
 
 // Datos iniciales de Bundles
@@ -59,19 +76,47 @@ const initialDiscounts: Discount[] = [
   },
 ];
 
+
+
+const initialComplements: Complement[] = [
+  {
+    nameComplement: "Complementos",
+    urlProduct: "test",
+    idTnProduct: "test",
+    urlImageProduct: "test",
+  },
+];
+
+
 // 1. Detección del índice predeterminado para el estado inicial
 const defaultIndex = initialDiscounts.findIndex((d) => d.default);
+
+
+
+
 
 const BundleContainer = () => {
   let navigate = useNavigate();
 
   const [discounts, setDiscounts] = useState<Discount[]>(initialDiscounts);
+  const [complements, setComplements] = useState<Complement[]>(initialComplements);
+
+
   // 2. Inicializar selectedIndex con el índice predeterminado detectado (o null)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(
     defaultIndex !== -1 ? defaultIndex : null
   );
 
+
+  const [selectedIndexComplement, setSelectedIndexComplement] = useState<number | null>(
+    defaultIndex !== -1 ? defaultIndex : null
+  );
+
+
+
   const [form, setForm] = useState<Discount>(initialFormState);
+  const [formComplement, setFormComplement] = useState<Complement>(initialFormStateComplement);
+
   const [borderColor, setBorderColor] = useState("");
   const [discountColor, setDiscountColor] = useState("");
   const [labelBackgroundColor, setLabelBackgroundColor] = useState("");
@@ -79,8 +124,12 @@ const BundleContainer = () => {
     "¡GANÁ comprando POR CANTIDAD!"
   );
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+const [editingIndexComplement , setEditingIndexComplement] = useState<number | null>(null);
+
+  
   const [selectedQuantity, setSelectedQuantity] = useState();
   const [variantsOn, setVariantsOn] = useState("false");
+  const [complementsOn, setComplementsOn]= useState("false");
   const [imagen, setImg] = useState("");
 const [style, setStyle] = useState(1);
     // En tu componente principal (donde uses este JSX) deberías definir el estado, por ejemplo:
@@ -176,6 +225,21 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
       [field]: value,
     });
   };
+
+
+
+
+  const handleChangeComplements = (
+    field: keyof Complement,
+    value: string | number | boolean
+  ) => {
+    setFormComplement({
+      ...formComplement,
+      [field]: value,
+    });
+  };
+
+
 
   /**
    * Maneja el envío del formulario (Agregar o Editar).
@@ -279,9 +343,104 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
       ["labeltext"]: discounts[selectedIndex]?.labeltext || "",
       ["img"]: discounts[selectedIndex]?.img || "",
       ["variants"]: variantsOn,
+      
     });
   };
 
+
+
+
+
+
+
+  const handleSubmitComplements = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newComplement: Complement = {
+      ...formComplement,
+      nameComplement: formComplement.nameComplement,
+      idTnProduct: formComplement.idTnProduct,
+    };
+
+    let updatedComplements: Complement[];
+    let targetIndex: number; // Para rastrear el índice del elemento modificado/añadido
+
+  {
+      // 2. Si el nuevo/editado NO es default, solo actualizar/añadir el elemento.
+      if (editingIndexComplement !== null) {
+        // MODO EDICIÓN
+        updatedComplements = complements.map((d, i) =>
+          i === editingIndexComplement ? newComplement : d
+        );
+        targetIndex = editingIndexComplement;
+        setEditingIndexComplement(null);
+      } else {
+        // MODO AGREGAR
+        updatedComplements = [...complements, newComplement];
+        targetIndex = updatedComplements.length - 1;
+      }
+    }
+
+    setComplements(updatedComplements); // Guardar la lista final
+    setForm(initialFormState); // Resetear formulario
+    // 4. Seleccionar el elemento que acaba de ser creado/editado
+    setFormComplement({
+      ...formComplement,
+    });
+    setSelectedIndex(targetIndex);
+  };
+
+  const handleDeleteComplements = () => {
+    if (selectedIndex !== null) {
+      const newComplements = complements.filter((_, i) => i !== selectedIndex);
+      setComplements(newComplements);
+      // Seleccionar el índice anterior, o null si la lista queda vacía
+      const newIndex =
+        selectedIndex > 0
+          ? selectedIndex - 1
+          : newComplements.length > 0
+          ? 0
+          : null;
+      setSelectedIndex(newIndex);
+
+      if (editingIndexComplement === selectedIndex) {
+        setEditingIndexComplement(null);
+        setFormComplement(initialFormStateComplement);
+      }
+
+      setFormComplement({
+        ...formComplement,
+      });
+    }
+  };
+
+  const startEditingComplements = () => {
+    if (selectedIndex !== null && complements[selectedIndex]) {
+      setEditingIndex(selectedIndex);
+      setForm(discounts[selectedIndex]);
+    }
+
+    setForm({
+      ...form,
+      ["name"]: discounts[selectedIndex]?.name || "",
+      ["quantity"]: discounts[selectedIndex]?.quantity || 0,
+      ["label"]: discounts[selectedIndex]?.label || "",
+      ["subtitle"]: discounts[selectedIndex]?.subtitle || "",
+      ["priceoriginal"]: discounts[selectedIndex]?.priceoriginal || "",
+      ["pricefinal"]: discounts[selectedIndex]?.pricefinal || "",
+      ["labeltext"]: discounts[selectedIndex]?.labeltext || "",
+      ["img"]: discounts[selectedIndex]?.img || "",
+      ["variants"]: variantsOn,
+      
+    });
+  };
+
+
+
+
+
+
+
+  
   /**
    * Mueve un descuento hacia arriba o abajo en la lista.
    */
@@ -306,6 +465,7 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
   };
 
   const isEditing = editingIndex !== null;
+  const isEditingComplement = editingIndexComplement !== null;
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
@@ -590,6 +750,8 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
                 </div>
               </CardContent>
             </Card>
+
+            {/* Opciones De complemento Card (mantener) */}
 
             {/* Opciones Visuales Card (mantener) */}
             <Card>
