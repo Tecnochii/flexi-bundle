@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import VideoSection from "./VideoSection";
 
 interface Discount {
   label: string;
@@ -395,6 +396,7 @@ const Bundles1 = ({
           * Esto tiene que ser pegado en la descripcion del producto
         </p>
       </div>
+      <VideoSection />
     </>
   );
 };

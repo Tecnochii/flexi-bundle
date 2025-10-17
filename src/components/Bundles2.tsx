@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
+import VideoSection from './VideoSection';
 
 interface Discount {
   label: string;
@@ -328,6 +329,8 @@ setLoading(true);
           * Esto tiene que ser pegado en la descripción del producto
         </p>
       </div>
+            <VideoSection />
+
     </>
   );
 };
