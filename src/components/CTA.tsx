@@ -43,7 +43,12 @@ const CTA = () => {
                   Crear mi primera oferta
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button variant="outline" size="lg" className="text-base font-semibold">
+                <Button  onClick={() => {
+    const phone = "5492213531405"; // formato correcto sin espacios ni signos
+    const message = encodeURIComponent("¡Hola! Quiero hablar con el equipo de ventas.");
+    const url = `https://wa.me/${phone}?text=${message}`;
+    window.open(url, "_blank");
+  }} variant="outline" size="lg" className="text-base font-semibold">
                   Hablar con ventas
                 </Button>
               </div>

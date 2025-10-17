@@ -74,7 +74,7 @@ const LoginRegistro = () => {
   // Función para manejar la lógica de REGISTRO
   const manejarRegistro = () => {
     // URL del webhook de registro
-    const urlRegistro = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/register"; 
+    const urlRegistro = "https://n8n-n8n.qxzsxx.easypanel.host/webhook-test/register"; 
 
     fetch(urlRegistro, {
       method: "POST",
