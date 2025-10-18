@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import VideoSection from './VideoSection';
+import ComplementsList from './ComplementsList';
 
 interface Discount {
   label: string;
@@ -15,6 +16,16 @@ interface Discount {
   img?: string;
 }
 
+interface Complement {
+  nameComplement: string;
+  urlProduct: string;
+  idTnProduct: string;
+  urlImageProduct: string;
+  precioAntesComplemento: string;
+  precioDespuesComplemento: string;
+
+}
+
 interface BundlesProps {
   discounts?: Discount[];
   colorBorder?: string;
@@ -23,6 +34,9 @@ interface BundlesProps {
   bundleTitle?: string;
   variantsOn?: string | boolean;
   onSelectQuantity?: (quantity: number) => void;
+  complements?: Complement[];
+  complementTitle?: string;
+  complementsOn?: string | boolean;
 }
 
 const Bundles2 = ({
@@ -33,6 +47,9 @@ const Bundles2 = ({
   bundleTitle = 'Suscríbete y ahorra un 25%',
   variantsOn = 'false',
   onSelectQuantity,
+   complements = [],
+  complementTitle = "Completa tu kit",
+  complementsOn ="false"
 }: BundlesProps) => {
   const [selected, setSelected] = useState<number | null>(null);
   const [scriptContent, setScriptContent] = useState('');
@@ -118,6 +135,15 @@ setLoading(true);
 
   const [loading, setLoading] = useState(false);
 
+  const [selectedComplement, setSelectedComplement] = useState([]);
+
+  const handleSelectComplement = (index) => {
+    setSelectedComplement((prev) =>
+      prev.includes(index)
+        ? prev.filter((i) => i !== index)
+        : [...prev, index]
+    );
+  };
 
 
 
@@ -273,6 +299,12 @@ setLoading(true);
             );
           })}
         </div>
+
+          {complementsOn == true &&
+        
+        
+                  <ComplementsList complements={complements} selected={selectedComplement} onSelect={handleSelectComplement} complementTitle={complementTitle} />
+                  }
       </div>
 
       <div className="flex justify-center">
