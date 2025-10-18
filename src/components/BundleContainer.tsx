@@ -39,6 +39,8 @@ interface Complement {
   urlProduct: string;
   idTnProduct: string;
   urlImageProduct: string;
+  precioAntesComplemento: string;
+  precioDespuesComplemento: string;
 }
 
 // Valores iniciales por defecto para el formulario
@@ -55,10 +57,12 @@ const initialFormState: Discount = {
 
 
 const initialFormStateComplement: Complement = {
-  nameComplement: "",
+  nameComplement: "test",
   urlProduct: "",
-  idTnProduct: "",
-  urlImageProduct: "",
+  idTnProduct: "300231830",
+  urlImageProduct: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDHzmfDowgVONsl-LDaFxYbuIkmJn8G74JgA&s",
+  precioAntesComplemento: "99.000,00",
+  precioDespuesComplemento: "59.990,00"
 };
 
 // Datos iniciales de Bundles
@@ -80,10 +84,12 @@ const initialDiscounts: Discount[] = [
 
 const initialComplements: Complement[] = [
   {
-    nameComplement: "Complementos",
-    urlProduct: "test",
-    idTnProduct: "test",
-    urlImageProduct: "test",
+    nameComplement: "Remera 50%OFF",
+  urlProduct: "",
+  idTnProduct: "300231830",
+  urlImageProduct: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDHzmfDowgVONsl-LDaFxYbuIkmJn8G74JgA&s",
+  precioAntesComplemento: "99.000,00",
+  precioDespuesComplemento: "59.990,00"
   },
 ];
 
@@ -123,6 +129,9 @@ const BundleContainer = () => {
   const [bundleTitle, setBundleTitle] = useState(
     "¡GANÁ comprando POR CANTIDAD!"
   );
+  const [complementTitle, setComplementTitle] = useState("Completa tu kit");
+
+
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 const [editingIndexComplement , setEditingIndexComplement] = useState<number | null>(null);
 
@@ -163,6 +172,17 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
         access_token +
         "&product_id=" +
         product_id;
+
+
+ let urlProducts =
+        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/complementos?access_token=" +
+        access_token +
+        "&product_id=" +
+        product_id;
+
+
+
+
       fetch(urlLoginTest, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -177,7 +197,8 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
             setVariantsOn(data[0].product.variants_on);
             setImg(data[0].product.img);
             setStyle(data[0].product.style);
-
+            setComplementTitle(data[0].product.complement_title);
+            setComplementsOn(data[0].product.complements_on);
 
             if (data[0].product.style === 1) {
               setSelectedStyle("clasico");
@@ -196,7 +217,7 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
             setDiscounts(fetchedDiscounts);
 
 
-            console.log(data[0].product.style);
+            console.log(data[0].product);
 
             // 3. Lógica para seleccionar el default al cargar desde la API
             const defaultIndex = fetchedDiscounts.findIndex((d) => d.default);
@@ -211,6 +232,25 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
           }
         })
         .catch((error) => console.error("Error fetching data:", error));
+
+
+
+
+  fetch(urlProducts, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+         console.log(data);
+
+
+         setComplements(data[0].complementos);
+        })
+        .catch((error) => console.error("Error fetching data:", error));
+
+
+
     } else {
       navigate("/login");
     }
@@ -381,28 +421,28 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
     }
 
     setComplements(updatedComplements); // Guardar la lista final
-    setForm(initialFormState); // Resetear formulario
+    setFormComplement(initialFormStateComplement); // Resetear formulario
     // 4. Seleccionar el elemento que acaba de ser creado/editado
     setFormComplement({
       ...formComplement,
     });
-    setSelectedIndex(targetIndex);
+    setSelectedIndexComplement(targetIndex);
   };
 
   const handleDeleteComplements = () => {
-    if (selectedIndex !== null) {
-      const newComplements = complements.filter((_, i) => i !== selectedIndex);
+    if (selectedIndexComplement !== null) {
+      const newComplements = complements.filter((_, i) => i !== selectedIndexComplement);
       setComplements(newComplements);
       // Seleccionar el índice anterior, o null si la lista queda vacía
       const newIndex =
-        selectedIndex > 0
-          ? selectedIndex - 1
+        selectedIndexComplement > 0
+          ? selectedIndexComplement - 1
           : newComplements.length > 0
           ? 0
           : null;
-      setSelectedIndex(newIndex);
+      setSelectedIndexComplement(newIndex);
 
-      if (editingIndexComplement === selectedIndex) {
+      if (editingIndexComplement === selectedIndexComplement) {
         setEditingIndexComplement(null);
         setFormComplement(initialFormStateComplement);
       }
@@ -414,22 +454,18 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
   };
 
   const startEditingComplements = () => {
-    if (selectedIndex !== null && complements[selectedIndex]) {
-      setEditingIndex(selectedIndex);
-      setForm(discounts[selectedIndex]);
+    if (selectedIndexComplement !== null && complements[selectedIndexComplement]) {
+      setEditingIndexComplement(selectedIndexComplement);
+      setFormComplement(complements[selectedIndexComplement]);
     }
 
-    setForm({
-      ...form,
-      ["name"]: discounts[selectedIndex]?.name || "",
-      ["quantity"]: discounts[selectedIndex]?.quantity || 0,
-      ["label"]: discounts[selectedIndex]?.label || "",
-      ["subtitle"]: discounts[selectedIndex]?.subtitle || "",
-      ["priceoriginal"]: discounts[selectedIndex]?.priceoriginal || "",
-      ["pricefinal"]: discounts[selectedIndex]?.pricefinal || "",
-      ["labeltext"]: discounts[selectedIndex]?.labeltext || "",
-      ["img"]: discounts[selectedIndex]?.img || "",
-      ["variants"]: variantsOn,
+    setFormComplement({
+      ...formComplement,
+      ["nameComplement"]: complements[selectedIndexComplement]?.nameComplement || "",
+      ["urlProduct"]: complements[selectedIndexComplement]?.urlProduct || "",
+      ["idTnProduct"]: complements[selectedIndexComplement]?.idTnProduct || "",
+      ["urlImageProduct"]: complements[selectedIndexComplement]?.urlImageProduct || "",
+   
       
     });
   };
@@ -648,6 +684,85 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
               </CardContent>
             </Card>
 
+
+ {/* Opciones Visuales Card (mantener) */}
+            <Card>
+              <CardHeader>
+                <CardTitle>🎨 Opciones visuales</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="bundleTitle">Título de las ofertas</Label>
+                  <Input
+                    id="bundleTitle"
+                    value={bundleTitle}
+                    onChange={(e) => setBundleTitle(e.target.value)}
+                  />
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="borderColor">Borde</Label>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        id="borderColor"
+                        type="color"
+                        value={borderColor}
+                        onChange={(e) => setBorderColor(e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <Input
+                        value={borderColor}
+                        onChange={(e) => setBorderColor(e.target.value)}
+                        className="flex-1"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="discountColor">Precio antes</Label>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        id="discountColor"
+                        type="color"
+                        value={discountColor}
+                        onChange={(e) => setDiscountColor(e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <Input
+                        value={discountColor}
+                        onChange={(e) => setDiscountColor(e.target.value)}
+                        className="flex-1"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="labelBg">Etiquetas</Label>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        id="labelBg"
+                        type="color"
+                        value={labelBackgroundColor}
+                        onChange={(e) =>
+                          setLabelBackgroundColor(e.target.value)
+                        }
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <Input
+                        value={labelBackgroundColor}
+                        onChange={(e) =>
+                          setLabelBackgroundColor(e.target.value)
+                        }
+                        className="flex-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+
             {/* TARJETA de SELECCIÓN y ACCIONES (Editar/Eliminar/Reordenar) */}
             <Card>
               <CardHeader>
@@ -754,86 +869,223 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
             {/* Opciones De complemento Card (mantener) */}
 
 
-         
-
-
-
-            {/* Opciones Visuales Card (mantener) */}
-            <Card>
-              <CardHeader>
-                <CardTitle>🎨 Opciones visuales</CardTitle>
+             <Card>
+              
+                 <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  ⚙️ Gestionar complementos
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="bundleTitle">Título de las ofertas</Label>
+              <CardContent>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="complements"
+                    checked={form.complements}
+                    onCheckedChange={(checked) => {
+                      handleChange("complements", checked === true);
+                      setComplementsOn(checked === true);
+                    }}
+                  />
+                  <Label htmlFor="complements" className="cursor-pointer">
+                    (Marcar si quiere agregar productos complementarios)
+                  </Label>
+                </div>
+
+              {complementsOn && (
+
+
+
+                  <div >
+                       <div className="space-y-2">
+                  <Label htmlFor="complementTitle">Título de los complementos</Label>
                   <Input
-                    id="bundleTitle"
-                    value={bundleTitle}
-                    onChange={(e) => setBundleTitle(e.target.value)}
+                    id="complementTitle"
+                    value={complementTitle}
+                    onChange={(e) => setComplementTitle(e.target.value)}
                   />
                 </div>
-
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="borderColor">Borde</Label>
-                    <div className="flex gap-2 items-center">
-                      <input
-                        id="borderColor"
-                        type="color"
-                        value={borderColor}
-                        onChange={(e) => setBorderColor(e.target.value)}
-                        className="w-12 h-10 rounded border cursor-pointer"
-                      />
-                      <Input
-                        value={borderColor}
-                        onChange={(e) => setBorderColor(e.target.value)}
-                        className="flex-1"
-                      />
-                    </div>
+                    <h2 className="mt-10 font-bold mb-2 ">Agregar Complemento</h2>
+                    
+                        <form onSubmit={handleSubmitComplements} className="space-y-4">
+                  {/* Campos del formulario */}
+                  <div className="space-y-2 ">
+                    <Label htmlFor="nameComplement">
+                     Nombre complemento
+                    </Label>
+                    <Input
+                      required
+                      id="nameComplement"
+                      value={formComplement.nameComplement}
+                      onChange={(e) => handleChangeComplements("nameComplement", e.target.value)}
+                      placeholder="Zapatillas 70% off"
+                    />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="discountColor">Precio antes</Label>
-                    <div className="flex gap-2 items-center">
-                      <input
-                        id="discountColor"
-                        type="color"
-                        value={discountColor}
-                        onChange={(e) => setDiscountColor(e.target.value)}
-                        className="w-12 h-10 rounded border cursor-pointer"
-                      />
-                      <Input
-                        value={discountColor}
-                        onChange={(e) => setDiscountColor(e.target.value)}
-                        className="flex-1"
-                      />
-                    </div>
+                    <Label htmlFor="name">Id del producto complementario (es el id del producto en tienda nube)</Label>
+                    <Input
+                      id="idTnProduct"
+                      required
+                      value={formComplement.idTnProduct}
+                      onChange={(e) => handleChangeComplements("idTnProduct", e.target.value)}
+                      placeholder="22355232"
+                    />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="labelBg">Etiquetas</Label>
-                    <div className="flex gap-2 items-center">
-                      <input
-                        id="labelBg"
-                        type="color"
-                        value={labelBackgroundColor}
-                        onChange={(e) =>
-                          setLabelBackgroundColor(e.target.value)
-                        }
-                        className="w-12 h-10 rounded border cursor-pointer"
-                      />
-                      <Input
-                        value={labelBackgroundColor}
-                        onChange={(e) =>
-                          setLabelBackgroundColor(e.target.value)
-                        }
-                        className="flex-1"
-                      />
-                    </div>
+                    <Label htmlFor="urlProduct">
+                      urlDelProducto (product page link)
+                    </Label>
+                    <Input
+                      placeholder="dominio.com/producto/zapatillas-70-off"
+                      required
+                      id="urlProduct"
+                      type="string"
+                      min="1"
+                      value={formComplement.urlProduct}
+                      onChange={(e) =>
+                        handleChangeComplements("urlProduct", e.target.value)
+                      }
+                    />
                   </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="urlImageProduct">Url de la imagen del producto (imagen para mostrar el complemento)</Label>
+                    <Input
+                      id="urlImageProduct"
+                      value={formComplement.urlImageProduct}
+                      onChange={(e) => handleChangeComplements("urlImageProduct", e.target.value)}
+                      placeholder="url.com/imagen.png"
+                    />
+                  </div>
+
+                
+<div className="space-y-2">
+                    <Label htmlFor="precioAntesComplemento">Precio Antes</Label>
+                    <Input
+                      id="precioAntesComplemento"
+                      value={formComplement.precioAntesComplemento}
+                      onChange={(e) => handleChangeComplements("precioAntesComplemento", e.target.value)}
+                      placeholder="url.com/imagen.png"
+                    />
+                  </div>
+
+
+                  <div className="space-y-2">
+                    <Label htmlFor="precioDespuesComplemento">Precio Despues</Label>
+                    <Input
+                      id="precioDespuesComplemento"
+                      value={formComplement.precioDespuesComplemento}
+                      onChange={(e) => handleChangeComplements("precioDespuesComplemento", e.target.value)}
+                      placeholder="url.com/imagen.png"
+                    />
+                  </div>
+                 
+
+                  <Button type="submit" className="w-full">
+                    {isEditingComplement ? "Guardar Cambios" : "Añadir Producto Complementario"}
+                  </Button>
+
+                  {isEditingComplement && (
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setEditingIndexComplement(null);
+                        setFormComplement(initialFormStateComplement);
+                        setSelectedIndexComplement(null);
+                        setFormComplement({
+                          ...formComplement,
+                          ["complements"]: complementsOn,
+                        });
+                      }}
+                      variant="outline"
+                      className="w-full mt-2"
+                    >
+                      Cancelar Edición
+                    </Button>
+                  )}
+                </form>
+
+
+
+                       <Label htmlFor="bundle-select" className="mb-2 block mt-10">
+                  Selecciona un producto complementario:
+                </Label>
+                <Select
+                  value={selectedIndexComplement?.toString() ?? ""}
+                  onValueChange={(value) => setSelectedIndexComplement(Number(value))}
+                >
+                  <SelectTrigger className="flex-1" id="bundle-select">
+                    <SelectValue placeholder="Selecciona un descuento" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {complements.map((d, i) => (
+                      <SelectItem key={i} value={i.toString()}>
+                        {`#${i + 1}: ${d.idTnProduct} - ${d.nameComplement} `}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <div className="flex gap-2 mt-4">
+                  {/* Botones de REORDENAMIENTO */}
+                  <Button
+                    onClick={() => handleReorder("up")}
+                    disabled={selectedIndexComplement === null || selectedIndexComplement === 0}
+                    variant="outline"
+                    title="Mover hacia arriba"
+                  >
+                    <ArrowUp className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    onClick={() => handleReorder("down")}
+                    disabled={
+                      selectedIndexComplement === null ||
+                      selectedIndexComplement === discounts.length - 1
+                    }
+                    variant="outline"
+                    title="Mover hacia abajo"
+                  >
+                    <ArrowDown className="w-4 h-4" />
+                  </Button>
+
+                  {/* Botones de EDICIÓN y ELIMINAR */}
+                  <Button
+                    onClick={startEditingComplements}
+                    disabled={selectedIndexComplement === null || isEditingComplement}
+                    variant="default"
+                    className="flex-1"
+                  >
+                    <Edit className="w-4 h-4 mr-2" />
+                    Editar
+                  </Button>
+                  <Button
+                    onClick={handleDeleteComplements}
+                    disabled={selectedIndexComplement === null}
+                    variant="destructive"
+                    className="flex-1"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Eliminar
+                  </Button>
                 </div>
+                {isEditingComplement && (
+                  <p className="text-sm text-yellow-600 mt-2">
+                    *Estás en **modo edición**. Clica en "Cancelar Edición" para
+                    reordenar.
+                  </p>
+                )}
+                  </div>
+                )}
+
+
               </CardContent>
-            </Card>
+              
+              </Card> 
+
+
+
+           
           </div>
 
           {/* Right Column - Preview (mantener) */}
@@ -895,6 +1147,9 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
                   labelBackgroundColor={labelBackgroundColor}
                   onSelectQuantity={setSelectedQuantity}
                   variantsOn={variantsOn}
+                  complements={complements}
+                  complementTitle={complementTitle}
+                  complementsOn={complementsOn}
                   // Aquí deberías pasar la cantidad del bundle seleccionado por defecto
                   // si Bundles necesita saber cuál está seleccionado inicialmente en la vista previa
                 />
@@ -906,6 +1161,10 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
                   labelBackgroundColor={labelBackgroundColor}
                   onSelectQuantity={setSelectedQuantity}
                   variantsOn={variantsOn}
+                  complements={complements}
+                  complementTitle={complementTitle}
+                  complementsOn={complementsOn}
+
                   // Aquí deberías pasar la cantidad del bundle seleccionado por defecto
                   // si Bundles necesita saber cuál está seleccionado inicialmente en la vista previa
                 /></>

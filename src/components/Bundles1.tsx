@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import VideoSection from "./VideoSection";
+import ComplementsList from "./ComplementsList";
 
 interface Discount {
   label: string;
@@ -13,6 +14,17 @@ interface Discount {
   name?: string;
 }
 
+
+interface Complement {
+  nameComplement: string;
+  urlProduct: string;
+  idTnProduct: string;
+  urlImageProduct: string;
+  precioAntesComplemento: string;
+  precioDespuesComplemento: string;
+
+}
+
 interface BundlesProps {
   discounts?: Discount[];
   colorBorder?: string;
@@ -21,6 +33,9 @@ interface BundlesProps {
   bundleTitle?: string;
   variantsOn?: string | boolean;
   onSelectQuantity?: (quantity: number) => void;
+  complements?: Complement[];
+  complementTitle?: string;
+  complementsOn?: string | boolean;
 }
 
 const Bundles1 = ({
@@ -31,6 +46,10 @@ const Bundles1 = ({
   bundleTitle = "¡GANÁ comprando POR CANTIDAD!",
   variantsOn = "false",
   onSelectQuantity,
+  complements = [],
+  complementTitle = "Completa tu kit",
+  complementsOn ="false"
+
 }: BundlesProps) => {
   // Estado arranca en null
   const [selected, setSelected] = useState<number | null>(null);
@@ -156,13 +175,22 @@ const Bundles1 = ({
     let product_id = param.get("id");
 
     if (access_token) {
-      let urlLoginTest =
+      let urlLoginProd =
         "https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token=" +
         access_token +
         "&product_id=" +
         product_id;
 
-      fetch(urlLoginTest, {
+
+
+
+           let urlLoginTest =
+        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/complementos?access_token=" +
+        access_token +
+        "&product_id=" +
+        product_id;
+
+      fetch(urlLoginProd, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -182,15 +210,69 @@ const Bundles1 = ({
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
+
+
+
+    
+
+
+
+
+        })
+       
+
+
+     fetch(urlLoginTest, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          complementos: complements,
+         
+          complementTitle: complementTitle,
+          complementsOn: complementsOn
+         
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+
+
+
+          
+
+
+
+
         })
         .finally(() => {
           setLoading(false);
         });
+
+
+
+
+
+
+
+
+
     }
   };
 
   const [loading, setLoading] = useState(false);
 
+  const [selectedComplement, setSelectedComplement] = useState([]);
+
+  const handleSelectComplement = (index) => {
+    setSelectedComplement((prev) =>
+      prev.includes(index)
+        ? prev.filter((i) => i !== index)
+        : [...prev, index]
+    );
+  };
 
   return (
     <>
@@ -336,6 +418,18 @@ const Bundles1 = ({
             );
           })}
         </div>
+
+
+
+
+          {complementsOn == true &&
+
+
+          <ComplementsList complements={complements} selected={selectedComplement} onSelect={handleSelectComplement} complementTitle={complementTitle} />
+          }
+
+
+
       </div>
       <div className="flex justify-center">
         <Button
