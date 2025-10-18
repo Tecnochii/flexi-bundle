@@ -891,7 +891,7 @@ const [selectedStyle, setSelectedStyle] = useState('clasico');
                   </Label>
                 </div>
 
-              {complementsOn && (
+              {complementsOn == true && (
 
 
 
