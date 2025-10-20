@@ -1,6 +1,6 @@
 import BundleContainer from "@/components/BundleContainer";
 import { log } from "console";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
@@ -33,6 +33,14 @@ function obtenerCookie(nombre) {
     return null;
 }
 
+
+
+
+const [fechaActivacion, setFechaActivacion] = useState('');
+
+
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 let navigate =useNavigate();
 
 
@@ -40,8 +48,13 @@ let navigate =useNavigate();
 
 
    let access_token =  obtenerCookie('access_token');
-    console.log(access_token);
     
+
+
+    if(!isLoggedIn){
+
+    
+
    if(access_token){
     let urlLoginTest = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/verify?access_token="+access_token;
       fetch(urlLoginTest, {
@@ -51,7 +64,12 @@ let navigate =useNavigate();
     },
   }).then((response) => response.json())
   .then((data) => {
+
+
+    setIsLoggedIn(true);
+
     console.log(data);
+    setFechaActivacion(data.dias_restantes);
   })
   .catch((error) => {
     console.log(error);
@@ -59,10 +77,13 @@ navigate('/login');
   })
     
    }
+
+   }
+
   }, []);
 
 
-  return <BundleContainer />;
+  return <BundleContainer fechaActivacion = {fechaActivacion} />;
 };
 
 export default Index;

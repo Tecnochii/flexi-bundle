@@ -221,10 +221,11 @@ function obtenerCookie(nombre) {
   }).then((response) => response.json())
   .then((data) => {
     console.log(data);
+navigate('/list');
+
   })
   .catch((error) => {
     console.log(error);
-navigate('/list');
   })
     
    }
