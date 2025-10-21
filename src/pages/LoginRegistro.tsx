@@ -67,7 +67,6 @@ const LoginRegistro = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nombre, setNombre] = useState(''); 
-  const [web, setWeb] = useState(''); // ¡NUEVO ESTADO PARA LA WEB!
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
@@ -86,7 +85,6 @@ const LoginRegistro = () => {
         nombre: nombre,
         email: email,
         password: password,
-        web: [web], // ENVIAR EL NUEVO CAMPO 'web'
       }),
     })
     .then((response) => {
@@ -178,7 +176,6 @@ const LoginRegistro = () => {
     setEmail('');
     setPassword('');
     setNombre('');
-    setWeb(''); // Limpiar el campo web
   };
 
 
@@ -270,17 +267,7 @@ navigate('/list');
           />
         )}
         
-        {/* Campo Web (solo para Registro) */}
-        {!esLogin && (
-          <input
-            type="text" // Usamos 'url' para validación básica
-            placeholder="Web/Dominio (ej: miweb.com)"
-            value={web}
-            onChange={(e) => setWeb(e.target.value)}
-            required={!esLogin}
-            style={estilos.entrada}
-          />
-        )}
+      
 
         {/* Campo Email */}
         <input
