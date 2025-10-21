@@ -20,6 +20,9 @@ import Bundles1 from "./Bundles1";
 import Bundles2 from "./Bundles2";
 import BannerLucid from "./BannerLucid";
 import { log } from "console";
+import { getTiendaNubeConfig, getProduct, getProducts } from '@/utils/tiendanubeApi';
+
+
 
 interface Discount {
   label: string;
@@ -152,8 +155,42 @@ const BundleContainer = ({fechaActivacion = ""}) => {
     return null;
   }
 
+
+  const [productosTiendaNube, setProductosTiendaNube] = useState([]);
+
+  const getProductsTiendaNube = async () => {
+ let products = await getProducts();
+    console.log(products);
+    setProductosTiendaNube(products);
+  }
+
+
+
   // useEffect para la carga inicial (MODIFICADO para establecer el índice)
-  useEffect(() => {
+  useEffect( () => {
+
+
+ const tiendaNubeConfig = getTiendaNubeConfig();
+  
+  if (!tiendaNubeConfig) {
+    // Si no hay sesión, redirigir a autenticación
+    navigate('/tiendanube-auth');
+    return;
+  }
+
+
+
+
+      getProductsTiendaNube();
+
+
+
+
+
+
+
+
+
     let access_token = obtenerCookie("access_token");
 
     let param = new URLSearchParams(window.location.search);
@@ -203,7 +240,6 @@ const BundleContainer = ({fechaActivacion = ""}) => {
             const fetchedDiscounts: Discount[] = data[0].ofertas;
             setDiscounts(fetchedDiscounts);
 
-            console.log(data[0].product);
 
             // 3. Lógica para seleccionar el default al cargar desde la API
             const defaultIndex = fetchedDiscounts.findIndex((d) => d.default);
@@ -225,7 +261,6 @@ const BundleContainer = ({fechaActivacion = ""}) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
 
           setComplements(data[0].complementos);
         })
@@ -1166,6 +1201,7 @@ const BundleContainer = ({fechaActivacion = ""}) => {
                       complements={complements}
                       complementTitle={complementTitle}
                       complementsOn={complementsOn}
+                      products={productosTiendaNube}
                       // Aquí deberías pasar la cantidad del bundle seleccionado por defecto
                       // si Bundles necesita saber cuál está seleccionado inicialmente en la vista previa
                     />
@@ -1184,6 +1220,7 @@ const BundleContainer = ({fechaActivacion = ""}) => {
                       complements={complements}
                       complementTitle={complementTitle}
                       complementsOn={complementsOn}
+                      products={productosTiendaNube}
 
                       // Aquí deberías pasar la cantidad del bundle seleccionado por defecto
                       // si Bundles necesita saber cuál está seleccionado inicialmente en la vista previa

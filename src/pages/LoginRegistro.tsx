@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
+import { log } from 'console';
 // Estilos básicos (Mantenidos)
 const estilos = {
   contenedor: {
@@ -122,8 +123,17 @@ const LoginRegistro = () => {
         password: password,
       }),
     })
-    .then((response) => response.json())
+    .then((response) => 
+      
+       {
+         
+      
+    return response.json()
+       })
     .then((data) => {
+
+      console.log(data);
+      
       if(data.token) { // Verificar si el servidor devolvió un token
         const tokenValue = data.token;
         const expiryDate = new Date();

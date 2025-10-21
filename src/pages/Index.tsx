@@ -55,7 +55,6 @@ let navigate =useNavigate();
 
     
 
-   if(access_token){
     let urlLoginTest = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/verify?access_token="+access_token;
       fetch(urlLoginTest, {
     method: "GET",
@@ -68,15 +67,12 @@ let navigate =useNavigate();
 
     setIsLoggedIn(true);
 
-    console.log(data);
     setFechaActivacion(data.dias_restantes);
   })
   .catch((error) => {
-    console.log(error);
 navigate('/login');
   })
     
-   }
 
    }
 

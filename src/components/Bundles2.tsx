@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import VideoSection from './VideoSection';
 import ComplementsList from './ComplementsList';
+import ProductSelect from './ProductSelect';
 
 interface Discount {
   label: string;
@@ -37,6 +38,8 @@ interface BundlesProps {
   complements?: Complement[];
   complementTitle?: string;
   complementsOn?: string | boolean;
+  products?: any[];
+
 }
 
 const Bundles2 = ({
@@ -49,7 +52,9 @@ const Bundles2 = ({
   onSelectQuantity,
    complements = [],
   complementTitle = "Completa tu kit",
-  complementsOn ="false"
+  complementsOn ="false",
+  products = []
+
 }: BundlesProps) => {
   const [selected, setSelected] = useState<number | null>(null);
   const [scriptContent, setScriptContent] = useState('');
@@ -94,25 +99,62 @@ const Bundles2 = ({
 
   const handleSelect = (index: number) => setSelected(index);
 
-  const handleApply = () => {
-
-
-setLoading(true);
-
-    let access_token = obtenerCookie('access_token');
+const handleApply = () => {
+    setLoading(true);
+    let access_token = obtenerCookie("access_token");
+    let tiendanube_token = obtenerCookie("tiendanube_token");
+let tiendanube_user_id = obtenerCookie("tiendanube_user_id");
     let param = new URLSearchParams(window.location.search);
-    let product_id = param.get('id');
+    let product_id = param.get("id");
+
+
+
+
+
+
+
+
+
 
     if (access_token) {
-      let urlLoginTest =
-        'https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token=' +
+
+
+      fetch(
+        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/scriptproduct?access_token=" +tiendanube_token+"&user_id="+tiendanube_user_id,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            product_id: product_id,
+            product_tn_id: productoSeleccionado,
+          }),
+        }
+      )
+
+
+
+      let urlLoginProd =
+        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token=" +
         access_token +
-        '&product_id=' +
+        "&product_id=" +
         product_id;
 
-      fetch(urlLoginTest, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+
+
+
+           let urlLoginTest =
+        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/complementos?access_token=" +
+        access_token +
+        "&product_id=" +
+        product_id;
+
+      fetch(urlLoginProd, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           ofertas: discounts,
           colors: {
@@ -122,13 +164,66 @@ setLoading(true);
           },
           bundle_title: bundleTitle,
           variants_on: variantsOn,
-          style:2
+          style: 2,
         }),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data))
-        .finally(() => setLoading(false));
-        
+        .then((data) => {
+          console.log(data);
+
+
+
+    
+
+
+
+
+        })
+       
+
+
+     fetch(urlLoginTest, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          complementos: complements,
+         
+          complementTitle: complementTitle,
+          complementsOn: complementsOn
+         
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+
+
+
+
+
+
+
+
+
+          
+
+
+
+
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+
+
+
+
+
+
+
+
+
     }
   };
 
@@ -146,6 +241,17 @@ setLoading(true);
   };
 
 
+
+  
+  
+  
+  const [productoSeleccionado, setProductoSeleccionado] = useState('');
+  
+    // 2. Handler que se ejecutará cuando el <select> cambie
+    const handleSelectChange = (event) => {
+      // event.target.value contendrá el ID del producto (ej: "301548428")
+      setProductoSeleccionado(event.target.value);
+    };
 
   return (
     <>
@@ -341,8 +447,11 @@ setLoading(true);
         </Button>
       </div>
 
-      <div>
-        <h5 style={{ fontWeight: 'bold', marginTop: '20px' }}>Script del Producto:</h5>
+        <div className="flex justify-center">
+
+
+        <ProductSelect products={products} value={productoSeleccionado} onChange={(event)=>handleSelectChange(event)} />
+        {/* <h5 style={{ fontWeight: 'bold', marginTop: '20px' }}>Script del Producto:</h5>
         <textarea
           name="product-script"
           id="product-script"
@@ -359,7 +468,7 @@ setLoading(true);
         />
         <p style={{ marginTop: '10px' }} className="text-gray-500">
           * Esto tiene que ser pegado en la descripción del producto
-        </p>
+        </p> */}
       </div>
             <VideoSection />
 

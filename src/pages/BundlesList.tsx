@@ -1,4 +1,5 @@
 import TablaProductos from '@/components/TablaProductos';
+import { Cookie } from 'lucide-react';
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -44,11 +45,48 @@ let navigate =useNavigate();
 
 
 
+
+
+
+
+
   useEffect(() => {
+
+ const urlParams = new URLSearchParams(window.location.search);
+
+const token = urlParams.get('token');
+
+urlParams.delete('token');
+
+const nuevoQueryString = urlParams.toString();
+const nuevaUrlRelativa = window.location.pathname + (nuevoQueryString ? '?' + nuevoQueryString : '');
+
+window.history.replaceState({}, '', nuevaUrlRelativa);
+
+
+
+  fetch('https://n8n-n8n.qxzsxx.easypanel.host/webhook/tnid?token='+ token, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data);
+        document.cookie = ('tiendanube_token='+token);
+        document.cookie = ('tiendanube_user_id='+data[0].user_id);
+
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+
+
+
 
     
    let access_token =  obtenerCookie('access_token');
-    console.log(access_token);
     
    if(access_token){
     let urlLoginTest = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/products?access_token="+access_token;
@@ -59,6 +97,9 @@ let navigate =useNavigate();
     },
   }).then((response) => response.json())
   .then((data) => {
+
+    console.log(data);
+    
     console.log(data[0].productos);
     setProducts(data[0].productos);
 

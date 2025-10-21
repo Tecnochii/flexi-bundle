@@ -8,6 +8,9 @@ import NotFound from "./pages/NotFound";
 import LoginRegistro from "./pages/LoginRegistro";
 import BundlesList from "./pages/BundlesList";
 import Home from "./pages/Home";
+// 👇 NUEVAS IMPORTACIONES PARA TIENDA NUBE
+import TiendaNubeAuth from "./pages/TiendaNubeAuth";
+import TiendaNubeCallback from "./pages/TiendaNubeCallback";
 
 const queryClient = new QueryClient();
 
@@ -21,8 +24,11 @@ const App = () => (
           <Route path="/" element={<Home />} />
           <Route path="/generador" element={<Index />} />
           <Route path="/list" element={<BundlesList />} />
-
           <Route path="/login" element={<LoginRegistro />} />
+          
+          {/* 👇 NUEVAS RUTAS PARA TIENDA NUBE */}
+          <Route path="/tiendanube-auth" element={<TiendaNubeAuth />} />
+          <Route path="/auth/callback" element={<TiendaNubeCallback />} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

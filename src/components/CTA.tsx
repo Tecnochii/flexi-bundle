@@ -39,7 +39,7 @@ const CTA = () => {
 
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Button onClick={() => navigate("/login")} variant="default" size="lg" className="text-base font-semibold">
+                <Button onClick={() => navigate("/generador")} variant="default" size="lg" className="text-base font-semibold">
                   Crear mi primera oferta
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
