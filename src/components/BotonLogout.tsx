@@ -20,6 +20,8 @@ const BotonLogout: React.FC = () => {
   const handleLogout = () => {
     // 1. Eliminar la cookie de autenticación
     eliminarCookie('access_token');
+    eliminarCookie('tiendanube_token');
+    eliminarCookie('tiendanube_user_id');
     
     // Si tuvieras un 'user_id' o 'session_id' también lo eliminarías aquí:
     // eliminarCookie('user_id'); 

@@ -5,7 +5,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
-import { Trash2, Plus, Edit, ArrowUp, ArrowDown } from "lucide-react";
+import { Trash2, Plus, Edit, ArrowUp, ArrowDown, Filter } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -21,6 +21,7 @@ import Bundles2 from "./Bundles2";
 import BannerLucid from "./BannerLucid";
 import { log } from "console";
 import { getTiendaNubeConfig, getProduct, getProducts } from '@/utils/tiendanubeApi';
+import ProductSelect from "./ProductSelect";
 
 
 
@@ -165,7 +166,6 @@ const BundleContainer = ({fechaActivacion = ""}) => {
   }
 
 
-
   // useEffect para la carga inicial (MODIFICADO para establecer el índice)
   useEffect( () => {
 
@@ -286,7 +286,7 @@ const BundleContainer = ({fechaActivacion = ""}) => {
   ) => {
     setFormComplement({
       ...formComplement,
-      [field]: value,
+      [field]: value
     });
   };
 
@@ -470,7 +470,7 @@ const BundleContainer = ({fechaActivacion = ""}) => {
       ...formComplement,
       ["nameComplement"]:
         complements[selectedIndexComplement]?.nameComplement || "",
-      ["urlProduct"]: complements[selectedIndexComplement]?.urlProduct || "",
+      // ["urlProduct"]: complements[selectedIndexComplement]?.urlProduct || "",
       ["idTnProduct"]: complements[selectedIndexComplement]?.idTnProduct || "",
       ["urlImageProduct"]:
         complements[selectedIndexComplement]?.urlImageProduct || "",
@@ -508,6 +508,25 @@ const BundleContainer = ({fechaActivacion = ""}) => {
 
 
 
+const [productoSeleccionado, setProductoSeleccionado] = useState('');
+const [urlProductoSeleccionado, setUrlProductoSeleccionado] = useState('');
+  // 2. Handler que se ejecutará cuando el <select> cambie
+  const handleSelectChange = (event) => {
+    // event.target.value contendrá el ID del producto (ej: "301548428")
+
+
+   let urlProducto = productosTiendaNube.filter(producto => producto.id == event.target.value)[0].canonical_url
+
+    setFormComplement({
+      ...formComplement,
+      ["idTnProduct"]: productoSeleccionado,
+      ["urlProduct"]: urlProducto,
+    });
+
+
+    setUrlProductoSeleccionado(urlProducto);
+    setProductoSeleccionado(event.target.value);
+  };
 
 
   return (
@@ -938,34 +957,23 @@ const BundleContainer = ({fechaActivacion = ""}) => {
 
                       <div className="space-y-2">
                         <Label htmlFor="name">
-                          Id del producto complementario (es el id del producto
-                          en tienda nube)
+                          Selecciona el Producto complementario 
+                        <ProductSelect products={productosTiendaNube} value={productoSeleccionado } onChange={(e) => handleSelectChange(e)} />
                         </Label>
-                        <Input
-                          id="idTnProduct"
-                          required
-                          value={formComplement.idTnProduct}
-                          onChange={(e) =>
-                            handleChangeComplements(
-                              "idTnProduct",
-                              e.target.value
-                            )
-                          }
-                          placeholder="22355232"
-                        />
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-2" >
                         <Label htmlFor="urlProduct">
                           urlDelProducto (product page link)
                         </Label>
                         <Input
+                        disabled
                           placeholder="dominio.com/producto/zapatillas-70-off"
                           required
                           id="urlProduct"
                           type="string"
                           min="1"
-                          value={formComplement.urlProduct}
+                          value={urlProductoSeleccionado}
                           onChange={(e) =>
                             handleChangeComplements(
                               "urlProduct",

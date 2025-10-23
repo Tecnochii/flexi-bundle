@@ -77,6 +77,10 @@ const Bundles1 = ({
 
   // Effect para obtener el 'id' del query param y generar el script
   useEffect(() => {
+
+    
+
+
     // Es importante que este código se ejecute en el navegador
     if (typeof window !== "undefined") {
       const param = new URLSearchParams(window.location.search);
@@ -185,7 +189,7 @@ let tiendanube_user_id = obtenerCookie("tiendanube_user_id");
 
 
 
-
+    
 
 
     if (access_token) {
@@ -313,11 +317,14 @@ let tiendanube_user_id = obtenerCookie("tiendanube_user_id");
 
 
 
-const [productoSeleccionado, setProductoSeleccionado] = useState('');
+const [productoSeleccionado, setProductoSeleccionado] = useState({});
 
   // 2. Handler que se ejecutará cuando el <select> cambie
   const handleSelectChange = (event) => {
     // event.target.value contendrá el ID del producto (ej: "301548428")
+
+
+
     setProductoSeleccionado(event.target.value);
   };
 

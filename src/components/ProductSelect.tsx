@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Package, ChevronDown } from 'lucide-react'; // Importamos los íconos
 
 /**
@@ -10,8 +10,15 @@ import { Package, ChevronDown } from 'lucide-react'; // Importamos los íconos
  * @param {function} onChange - La función a llamar cuando la selección cambia.
  * @param {string} [label] - Un label opcional para el select.
  */
-function ProductSelect({ products, value, onChange, label = "Selecciona el producto de tu bundle" }) {
-  
+function ProductSelect({ products, value, onChange, label = "Selecciona el producto de tu bundle"}) {
+
+
+
+
+
+
+
+
   return (
     <div className='flex flex-col mt-10 gap-2'>
       
