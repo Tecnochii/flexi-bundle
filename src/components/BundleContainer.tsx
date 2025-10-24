@@ -511,22 +511,29 @@ const BundleContainer = ({fechaActivacion = ""}) => {
 const [productoSeleccionado, setProductoSeleccionado] = useState('');
 const [urlProductoSeleccionado, setUrlProductoSeleccionado] = useState('');
   // 2. Handler que se ejecutará cuando el <select> cambie
-  const handleSelectChange = (event) => {
-    // event.target.value contendrá el ID del producto (ej: "301548428")
-
-
-   let urlProducto = productosTiendaNube.filter(producto => producto.id == event.target.value)[0].canonical_url
-
+const handleSelectChange = (event) => {
+  const selectedProductId = event.target.value;
+  
+  // Buscar el producto seleccionado
+  const selectedProduct = productosTiendaNube.find(
+    producto => producto.id == selectedProductId
+  );
+  
+  if (selectedProduct) {
+    const urlProducto = selectedProduct.canonical_url;
+    
+    // Actualizar ambos estados
+    setProductoSeleccionado(selectedProductId);
+    setUrlProductoSeleccionado(urlProducto);
+    
+    // Actualizar el formulario con los valores correctos
     setFormComplement({
       ...formComplement,
-      ["idTnProduct"]: productoSeleccionado,
-      ["urlProduct"]: urlProducto,
+      idTnProduct: selectedProductId, // Usar el valor directamente, no el estado
+      urlProduct: urlProducto,
     });
-
-
-    setUrlProductoSeleccionado(urlProducto);
-    setProductoSeleccionado(event.target.value);
-  };
+  }
+};
 
 
   return (
