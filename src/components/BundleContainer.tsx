@@ -471,7 +471,7 @@ const BundleContainer = ({fechaActivacion = ""}) => {
       ["nameComplement"]:
         complements[selectedIndexComplement]?.nameComplement || "",
       // ["urlProduct"]: complements[selectedIndexComplement]?.urlProduct || "",
-      ["idTnProduct"]: complements[selectedIndexComplement]?.idTnProduct || "",
+      // ["idTnProduct"]: complements[selectedIndexComplement]?.idTnProduct || "",
       ["urlImageProduct"]:
         complements[selectedIndexComplement]?.urlImageProduct || "",
     });
