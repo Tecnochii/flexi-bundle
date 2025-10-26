@@ -175,62 +175,58 @@ const Bundles1 = ({
     setSelected(index);
   };
 
-  const handleApply = () => {
+const handleApply = () => {
     setLoading(true);
     let access_token = obtenerCookie("access_token");
     let tiendanube_token = obtenerCookie("tiendanube_token");
-let tiendanube_user_id = obtenerCookie("tiendanube_user_id");
+    let tiendanube_user_id = obtenerCookie("tiendanube_user_id");
     let param = new URLSearchParams(window.location.search);
     let product_id = param.get("id");
 
+    // 1. Validar datos clave
+    if (
+      !access_token ||
+      !tiendanube_user_id ||
+      !productoSeleccionado ||
+      !tiendanube_token
+    ) {
+      console.error("Faltan datos de cookie, token o producto seleccionado", {
+        access_token,
+        tiendanube_user_id,
+        productoSeleccionado,
+        tiendanube_token,
+      });
+      setLoading(false); 
+      return;
+    }
 
+    // --- Preparamos todas las promesas (peticiones) ---
 
-
-
-
-
-    
-
-
-    if (access_token) {
-
-
-      fetch(
-        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/scriptproduct?access_token=" +tiendanube_token+"&user_id="+tiendanube_user_id,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            product_id: product_id,
-            product_tn_id: productoSeleccionado,
-          }),
-        }
-      )
-
-
-
-      let urlLoginProd =
-        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token=" +
-        access_token +
-        "&product_id=" +
-        product_id;
-
-
-
-
-           let urlLoginTest =
-        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/complementos?access_token=" +
-        access_token +
-        "&product_id=" +
-        product_id;
-
-      fetch(urlLoginProd, {
+    // 2. Petición para 'scriptproduct'
+    const scriptProductPromise = fetch(
+      "https://n8n-n8n.qxzsxx.easypanel.host/webhook/scriptproduct?access_token=" +
+        tiendanube_token +
+        "&user_id=" +
+        tiendanube_user_id,
+      {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product_id: product_id,
+          product_tn_id: productoSeleccionado,
+        }),
+      }
+    ).then((res) => res.json());
+
+    // 3. Petición para 'ofertas'
+    const ofertasPromise = fetch(
+      "https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token=" +
+        access_token +
+        "&product_id=" +
+        product_id,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ofertas: discounts,
           colors: {
@@ -242,65 +238,144 @@ let tiendanube_user_id = obtenerCookie("tiendanube_user_id");
           variants_on: variantsOn,
           style: 1,
         }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
+      }
+    ).then((res) => res.json());
 
-
-
-    
-
-
-
-
-        })
-       
-
-
-     fetch(urlLoginTest, {
+    // 4. Petición para 'complementos' (la lista completa)
+    const complementosPromise = fetch(
+      "https://n8n-n8n.qxzsxx.easypanel.host/webhook/complementos?access_token=" +
+        access_token +
+        "&product_id=" +
+        product_id,
+      {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           complementos: complements,
-         
           complementTitle: complementTitle,
-          complementsOn: complementsOn
-         
+          complementsOn: complementsOn,
         }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
+      }
+    ).then((res) => res.json());
 
+    // 5. Múltiples peticiones para 'register-callback-cart' (UNA POR CADA DESCUENTO)
+    const callbackCartPromises = discounts.map((discount) => {
+      const cleanPrice = discount.pricefinal
+        .replace(/\./g, "") 
+        .replace(",", "."); 
 
+      const dataCallbackCart = {
+        store_id: parseInt(tiendanube_user_id, 10),
+        id_producto_tn: parseInt(productoSeleccionado, 10), // ID Principal
+        access_token_tn: tiendanube_token,
+        name:
+          discount.name ||
+          `${discount.quantity} Unidad${discount.quantity > 1 ? "es" : ""}`,
+        promo_type: "fixed_price_total",
+        condition_type: "quantity_min",
+        allocation_type: "line_item",
+        condition_value: discount.quantity,
+        value: parseFloat(cleanPrice) ,
+        bxgy_reward_type: null,
+        bxgy_reward_product_id: null,
+        bxgy_reward_value: parseFloat(cleanPrice),
+      };
 
-
-
-
-
-
-
-          
-
-
-
-
+      return fetch(
+        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/register-callback-cart",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dataCallbackCart),
+        }
+      )
+        .then((response) => {
+          if (!response.ok) throw new Error(`Error HTTP ${response.status} para: ${discount.name}`);
+          return response.json();
         })
-        .finally(() => {
-          setLoading(false);
+        .then((data) => {
+          console.log(`Éxito callback-cart (Descuento) ${discount.name}:`, data);
+          return data; 
+        })
+        .catch((error) => {
+          console.error(`Error en fetch (Descuento) ${discount.name}:`, error);
+          return Promise.reject(error); 
         });
+    });
+
+    // 6. (NUEVO) Múltiples peticiones para 'register-callback-cart' (UNA POR CADA COMPLEMENTO)
+    const complementCallbackPromises = complements.map((complement) => {
+      // Limpiamos el precio del complemento
+      const cleanPrice = complement.precioDespuesComplemento
+        .replace(/\./g, "") // Quita separadores de miles
+        .replace(",", "."); // Reemplaza coma decimal por punto
+
+      // Creamos el body según lo confirmado
+      const dataParaComplemento = {
+        store_id: parseInt(tiendanube_user_id, 10),
+        id_producto_tn: parseInt(complement.idTnProduct, 10), // ID del Complemento
+        access_token_tn: tiendanube_token,
+        name: complement.nameComplement,
+        promo_type: "fixed_price_total",
+        condition_type: "quantity_min",
+        allocation_type: "line_item",
+        condition_value: 1, // Valor estático 1
+        value: parseFloat(cleanPrice),
+        bxgy_reward_type: null,
+        bxgy_reward_product_id: null,
+        bxgy_reward_value: parseFloat(cleanPrice) // Valor estático 500
+      };
+      
+      return fetch(
+        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/register-callback-cart",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dataParaComplemento),
+        }
+      )
+        .then((response) => {
+          if (!response.ok) throw new Error(`Error HTTP ${response.status} para: ${complement.nameComplement}`);
+          return response.json();
+        })
+        .then((data) => {
+          console.log(`Éxito callback-cart (Complemento) ${complement.nameComplement}:`, data);
+          return data; 
+        })
+        .catch((error) => {
+          console.error(`Error en fetch (Complemento) ${complement.nameComplement}:`, error);
+          return Promise.reject(error); 
+        });
+    });
 
 
+    // --- Ejecutamos TODAS las promesas juntas ---
+    const allPromises = [
+      scriptProductPromise,
+      ofertasPromise,
+      complementosPromise,
+      ...callbackCartPromises,
+      ...complementCallbackPromises, // <-- AÑADIDO EL NUEVO BUCLE
+    ];
 
-
-
-
-
-
-
-    }
+    Promise.allSettled(allPromises)
+      .then((results) => {
+        console.log("Resultados de todas las peticiones:", results);
+        
+        results.forEach((result, index) => {
+          if (result.status === 'rejected') {
+            console.warn(`La petición ${index} falló:`, result.reason);
+          }
+        });
+        
+      })
+      .catch((error) => {
+        console.error("Error inesperado en Promise.allSettled:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+        console.log("Todas las peticiones han finalizado.");
+      });
   };
 
   const [loading, setLoading] = useState(false);
