@@ -265,8 +265,8 @@ const handleApply = () => {
         .replace(",", "."); 
 
       const dataCallbackCart = {
-        store_id: parseInt(tiendanube_user_id, 10),
-        id_producto_tn: parseInt(productoSeleccionado, 10), // ID Principal
+        store_id: tiendanube_user_id,
+        id_producto_tn: productoSeleccionado, // ID Principal
         access_token_tn: tiendanube_token,
         name:
           discount.name ||
@@ -312,8 +312,8 @@ const handleApply = () => {
 
       // Creamos el body según lo confirmado
       const dataParaComplemento = {
-        store_id: parseInt(tiendanube_user_id, 10),
-        id_producto_tn: parseInt(complement.idTnProduct, 10), // ID del Complemento
+        store_id: tiendanube_user_id,
+        id_producto_tn: complement.idTnProduct, // ID del Complemento
         access_token_tn: tiendanube_token,
         name: complement.nameComplement,
         promo_type: "fixed_price_total",
