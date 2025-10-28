@@ -74,6 +74,8 @@ const Bundles2 = ({
     return null;
   }
 
+
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const param = new URLSearchParams(window.location.search);

@@ -12,12 +12,54 @@ import { Package, ChevronDown } from 'lucide-react'; // Importamos los íconos
  */
 function ProductSelect({ products, value, onChange, label = "Selecciona el producto de tu bundle"}) {
 
+  // --- Lógica para el valor por defecto ---
+  // Este useEffect se ejecuta cuando el componente se monta
+  // o cuando la lista de productos cambia.
+  useEffect(() => {
+    // 1. Leer el parámetro de la URL.
+    // Asumimos que el parámetro se llama 'id' (ej: ?id=producto-abc)
+    // ¡Puedes cambiar 'id' por el nombre real de tu parámetro!
+    const params = new URLSearchParams(window.location.search);
+    const urlId = params.get('id');
+
+    // 2. Si no hay 'id' en la URL, o si el padre YA pasó un 'value',
+    // no hacemos nada.
+    if (!urlId || value) {
+      return;
+    }
+
+    // 3. Buscar el producto que coincida.
+    if (Array.isArray(products)) {
+      // --- MODIFICACIÓN ---
+      // Creamos la cadena de texto específica que queremos buscar
+      // Usamos comillas literales (backticks) para insertar el urlId fácilmente.
+      const stringToFind = `<script src='https://n8n-n8n.qxzsxx.easypanel.host/webhook/sendid?product=${urlId}'/>`;
+
+      // Buscamos el producto cuya description.es *contenga* esta cadena
+      // Usamos .includes() que es el método correcto en JS (en lugar de .contains())
+      const matchingProduct = products.find(
+        (p) => p.description && p.description.es && p.description.es.includes(stringToFind)
+      );
+      // --- FIN DE LA MODIFICACIÓN ---
 
 
+      
+
+      // 4. Si encontramos un producto, actualizamos el estado
+      // en el componente padre llamando a onChange con el ID del producto.
+      if (matchingProduct) {
+        // Simulamos un evento 'change' para que el padre lo reciba
+
+          
+        onChange({ target: { value: matchingProduct.id } });
+      }
+    }
 
 
-
-
+    
+    // Ejecutamos esto solo si cambian los productos, el valor
+    // o la función onChange.
+  }, [products, value, onChange]);
 
   return (
     <div className='flex flex-col mt-10 gap-2'>
@@ -39,20 +81,22 @@ function ProductSelect({ products, value, onChange, label = "Selecciona el produ
         {/* --- Select Estilizado --- */}
         <select 
           id="product-select" 
-          value={value} 
+          // Usamos value || '' para asegurar que la opción por defecto
+          // se muestre si 'value' es null o undefined.
+          value={value || ''} 
           onChange={onChange}
           // --- Clases de Tailwind ---
           className="
-          text-lg
+            text-lg
             appearance-none  
-            block           
-            w-full           
+            block          
+            w-full          
             bg-white        
-            border           
+            border          
             border-gray-300 
-            rounded-md       
-            py-2 pl-3 pr-8   
-            text-base        
+            rounded-md      
+            py-2 pl-3 pr-8  
+            text-base       
             focus:outline-none 
             focus:ring-2
             focus:ring-blue-500
@@ -91,3 +135,4 @@ function ProductSelect({ products, value, onChange, label = "Selecciona el produ
 }
 
 export default ProductSelect;
+

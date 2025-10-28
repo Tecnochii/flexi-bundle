@@ -75,6 +75,12 @@ const Bundles1 = ({
     return null;
   }
 
+
+
+
+
+
+
   // Effect para obtener el 'id' del query param y generar el script
   useEffect(() => {
 
@@ -392,13 +398,13 @@ const handleApply = () => {
 
 
 
-const [productoSeleccionado, setProductoSeleccionado] = useState({});
+const [productoSeleccionado, setProductoSeleccionado] = useState("");
 
   // 2. Handler que se ejecutará cuando el <select> cambie
   const handleSelectChange = (event) => {
     // event.target.value contendrá el ID del producto (ej: "301548428")
 
-
+        
 
     setProductoSeleccionado(event.target.value);
   };
