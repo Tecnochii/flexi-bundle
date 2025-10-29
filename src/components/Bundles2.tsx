@@ -162,7 +162,7 @@ const handleApply = () => {
           },
           bundle_title: bundleTitle,
           variants_on: variantsOn,
-          style: 1,
+          style: 2,
         }),
       }
     ).then((res) => res.json());
