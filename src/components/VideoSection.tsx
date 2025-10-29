@@ -1,6 +1,6 @@
 import { Play } from "lucide-react";
 
-const VideoSection = () => {
+const VideoSection = ({videoId}) => {
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -32,7 +32,7 @@ const VideoSection = () => {
             {/* Replace the placeholder above with actual video embed like: */}
             <iframe
               className="absolute inset-0 w-full h-full"
-              src="https://www.youtube.com/embed/bmJVmcCzw0A"
+              src={"https://www.youtube.com/embed/" + videoId}
               title="TecnoBundles Demo"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

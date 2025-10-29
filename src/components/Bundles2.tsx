@@ -546,7 +546,7 @@ const handleApply = () => {
           * Esto tiene que ser pegado en la descripción del producto
         </p> */}
       </div>
-            <VideoSection />
+            <VideoSection videoId={"W1CfTPslqxs"}/>
 
     </>
   );

@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <Hero />
-      <VideoSection />
+      <VideoSection videoId={"H9P0yRufnKc"}/>
       <GifDemo />
       <Features />
       <Benefits />

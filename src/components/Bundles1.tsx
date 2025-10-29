@@ -629,7 +629,7 @@ const [productoSeleccionado, setProductoSeleccionado] = useState("");
           * Esto tiene que ser pegado en la descripcion del producto
         </p> */}
       </div>
-      <VideoSection />
+      <VideoSection videoId={"W1CfTPslqxs"}/>
     </>
   );
 };
