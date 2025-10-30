@@ -44,7 +44,7 @@ const CTA = () => {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 <Button  onClick={() => {
-    const phone = "5492213531405"; // formato correcto sin espacios ni signos
+    const phone = "5491135659647"; // formato correcto sin espacios ni signos
     const message = encodeURIComponent("¡Hola! Quiero hablar con el equipo de ventas.");
     const url = `https://wa.me/${phone}?text=${message}`;
     window.open(url, "_blank");
