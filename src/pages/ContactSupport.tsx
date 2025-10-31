@@ -346,7 +346,7 @@ const ContactSupport = () => {
               </form>
 
               {/* Additional Info */}
-              <div className="mt-8 pt-6 border-t">
+              {/* <div className="mt-8 pt-6 border-t">
                 <h3 className="font-semibold mb-3">Antes de contactarnos:</h3>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-start gap-2">
@@ -362,7 +362,7 @@ const ContactSupport = () => {
                     <span>Para problemas urgentes, contactá por WhatsApp para atención inmediata</span>
                   </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
