@@ -5,6 +5,7 @@ import Benefits from "@/components/Benefits";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import GifDemo from "@/components/GifDemo";
+import PricingHome from "./PricingHome";
 
 const Home = () => {
   return (
@@ -14,6 +15,7 @@ const Home = () => {
       <GifDemo />
       <Features />
       <Benefits />
+      <PricingHome />
       <CTA />
       <Footer />
     </div>

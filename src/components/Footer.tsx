@@ -1,4 +1,7 @@
+// src/components/Footer.tsx - ACTUALIZADO
+
 import { Package } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -23,21 +26,57 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold mb-4">Producto</h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li><a href="#" className="hover:text-primary transition-colors">Características</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Precios</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Casos de uso</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Integraciones</a></li>
+              <li>
+                <Link to="/#features" className="hover:text-primary transition-colors">
+                  Características
+                </Link>
+              </li>
+              <li>
+                <Link to="/pricing" className="hover:text-primary transition-colors">
+                  Precios
+                </Link>
+              </li>
+             
+              <li>
+                <Link to="/tiendanube-auth" className="hover:text-primary transition-colors">
+                  Conectar Tienda
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Soporte */}
+          {/* Soporte y Legal */}
           <div>
-            <h3 className="font-semibold mb-4">Soporte</h3>
+            <h3 className="font-semibold mb-4">Soporte y Legal</h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li><a href="#" className="hover:text-primary transition-colors">Documentación</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Tutoriales</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Centro de ayuda</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Contacto</a></li>
+              <li>
+                <a 
+                  href="mailto:soporte@tecnobundles.com" 
+                  className="hover:text-primary transition-colors"
+                >
+                  Contacto
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://wa.me/5491135659647" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors"
+                >
+                  WhatsApp
+                </a>
+              </li>
+              <li>
+                <Link to="/privacy-policy" className="hover:text-primary transition-colors">
+                  Política de Privacidad
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="hover:text-primary transition-colors">
+                  Términos y Condiciones
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -48,9 +87,18 @@ const Footer = () => {
             © 2025 TecnoBundles. Todos los derechos reservados.
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-primary transition-colors">Términos</a>
-            <a href="#" className="hover:text-primary transition-colors">Privacidad</a>
-            <a href="#" className="hover:text-primary transition-colors">Cookies</a>
+            <Link to="/terms" className="hover:text-primary transition-colors">
+              Términos
+            </Link>
+            <Link to="/privacy-policy" className="hover:text-primary transition-colors">
+              Privacidad
+            </Link>
+            <a 
+              href="mailto:soporte@tecnobundles.com" 
+              className="hover:text-primary transition-colors"
+            >
+              Soporte
+            </a>
           </div>
         </div>
       </div>
