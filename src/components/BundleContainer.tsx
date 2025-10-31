@@ -538,11 +538,11 @@ const handleSelectChange = (event) => {
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
-      <BannerLucid
+      {/* <BannerLucid
         mensaje = {"Te quedan " + fechaActivacion + " dias de uso"}
         conCerrar={true}
         alCerrar={() => setMostrarExito(false)}
-      />
+      /> */}
       <div className="flex justify-between">
         <BotonVolver />
         <BotonLogout />
