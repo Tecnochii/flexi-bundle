@@ -50,12 +50,12 @@ const Footer = () => {
             <h3 className="font-semibold mb-4">Soporte y Legal</h3>
             <ul className="space-y-2 text-muted-foreground">
               <li>
-                <a 
-                  href="mailto:soporte@tecnobundles.com" 
-                  className="hover:text-primary transition-colors"
-                >
+             
+
+
+                <Link to="/contact" className="hover:text-primary transition-colors">
                   Contacto
-                </a>
+                </Link>
               </li>
               <li>
                 <a 

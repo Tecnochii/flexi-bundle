@@ -14,6 +14,7 @@ import TiendaNubeCallback from "./pages/TiendaNubeCallback";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import PricingPage from "./pages/PricingPage";
+import ContactSupport from "./pages/ContactSupport";
 
 const queryClient = new QueryClient();
 
@@ -43,8 +44,13 @@ const App = () => (
           <Route path="/terminos" element={<TermsOfService />} />
 
 
-
+          {/* Rutas de Precios */}
           <Route path="/pricing" element={<PricingPage />} />
+
+
+          {/* Rutas de Soporte */}
+          <Route path="/contact" element={<ContactSupport />} />
+
 
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
