@@ -26,22 +26,22 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold mb-4">Producto</h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li>
+              {/* <li>
                 <Link to="/#features" className="hover:text-primary transition-colors">
                   Características
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link to="/pricing" className="hover:text-primary transition-colors">
                   Precios
                 </Link>
               </li>
              
-              <li>
+              {/* <li>
                 <Link to="/tiendanube-auth" className="hover:text-primary transition-colors">
                   Conectar Tienda
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 
