@@ -11,6 +11,8 @@ import Home from "./pages/Home";
 // 👇 NUEVAS IMPORTACIONES PARA TIENDA NUBE
 import TiendaNubeAuth from "./pages/TiendaNubeAuth";
 import TiendaNubeCallback from "./pages/TiendaNubeCallback";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,15 @@ const App = () => (
           {/* 👇 NUEVAS RUTAS PARA TIENDA NUBE */}
           <Route path="/tiendanube-auth" element={<TiendaNubeAuth />} />
           <Route path="/auth/callback" element={<TiendaNubeCallback />} />
+
+
+
+          {/* Rutas de Políticas y Términos */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/privacidad" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/terminos" element={<TermsOfService />} />
+
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
