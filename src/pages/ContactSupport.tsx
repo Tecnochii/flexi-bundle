@@ -91,7 +91,7 @@ const ContactSupport = () => {
   };
 
   const handleWhatsAppClick = () => {
-    const phone = '5492213531405';
+    const phone = '5491135659647';
     const message = encodeURIComponent('¡Hola! Necesito ayuda con TecnoBundles.');
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
