@@ -157,20 +157,20 @@ const handleGoToDashboard = () => {
     <div className="min-h-screen flex justify-center bg-gray-100">
       
       <div className="container mx-auto px-4 py-8">
-           {/* <div className="flex justify-between items-center mb-6">
+           <div className="flex justify-between items-center mb-6">
     <div className="flex items-center gap-4">
       <BotonVolver />
-      <Button 
+      {/* <Button 
         onClick={handleGoToDashboard}
         variant="default"
         className="flex items-center gap-2"
       >
         <BarChart3 className="w-4 h-4" />
         Ver Dashboard
-      </Button>
+      </Button> */}
     </div>
     <BotonLogout />
-  </div> */}
+  </div>
       <TablaProductos items={products} />
 
       </div>
