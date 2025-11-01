@@ -7,4 +7,7 @@ const options = {
   debug: false,     // Desactivar el modo de depuración
 };
 ReactPixel.init('770407779384093', null, options);
+
+
+ReactPixel.pageView();
 createRoot(document.getElementById("root")!).render(<App />);
