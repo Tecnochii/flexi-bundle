@@ -15,6 +15,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import PricingPage from "./pages/PricingPage";
 import ContactSupport from "./pages/ContactSupport";
+import Dashboard from "./pages/Dashboard";
+
 
 const queryClient = new QueryClient();
 
@@ -50,6 +52,9 @@ const App = () => (
 
           {/* Rutas de Soporte */}
           <Route path="/contact" element={<ContactSupport />} />
+
+          {/* Rutas de Dashboard */}
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
 
 

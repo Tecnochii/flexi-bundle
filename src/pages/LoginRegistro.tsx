@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import { log } from 'console';
+
+
+
+import ReactPixel from 'react-facebook-pixel';
+
 // Estilos básicos (Mantenidos)
 const estilos = {
   contenedor: {
@@ -74,6 +79,7 @@ const LoginRegistro = () => {
   // Función para manejar la lógica de REGISTRO
   const manejarRegistro = () => {
     // URL del webhook de registro
+    
     const urlRegistro = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/register"; 
 
     fetch(urlRegistro, {
@@ -97,6 +103,14 @@ const LoginRegistro = () => {
     .then((data) => {
       console.log("Registro exitoso:", data);
       
+
+      // **Aquí disparas el evento**
+        ReactPixel.track('CompleteRegistration', {
+          content_name: 'Suscripción Gratuita', // Opcional: para diferenciar tipos de registro
+          status: 'completado' // Opcional
+        });
+
+
       // Asumiendo que el registro NO devuelve un token inmediatamente y simplemente notifica:
       alert("¡Registro exitoso! Por favor, inicia sesión.");
       setEsLogin(true); // Cambiar a la vista de login automáticamente

@@ -122,10 +122,7 @@ const TablaProductos: React.FC<TablaProductosProps> = ({ items }) => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between">
-        <BotonVolver />
-        <BotonLogout />
-      </div>
+    
 
       <h2 className="text-xl font-bold mb-4 flex items-center justify-between gap-4">
         <span className="flex items-center gap-2">

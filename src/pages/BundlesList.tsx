@@ -7,6 +7,12 @@ import {
   getProduct,
   getProducts,
 } from "@/utils/tiendanubeApi";
+import { BarChart3 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import BotonVolver from "@/components/BotonVolver";
+import BotonLogout from "@/components/BotonLogout";
+
+
 
 function BundlesList() {
   const productos = [];
@@ -142,9 +148,32 @@ function BundlesList() {
     }
   }, []);
 
+const handleGoToDashboard = () => {
+  navigate('/dashboard');
+};
+
+
   return (
     <div className="min-h-screen flex justify-center bg-gray-100">
+      
+      <div className="container mx-auto px-4 py-8">
+           {/* <div className="flex justify-between items-center mb-6">
+    <div className="flex items-center gap-4">
+      <BotonVolver />
+      <Button 
+        onClick={handleGoToDashboard}
+        variant="default"
+        className="flex items-center gap-2"
+      >
+        <BarChart3 className="w-4 h-4" />
+        Ver Dashboard
+      </Button>
+    </div>
+    <BotonLogout />
+  </div> */}
       <TablaProductos items={products} />
+
+      </div>
     </div>
   );
 }
