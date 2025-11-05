@@ -28,7 +28,7 @@ function ProductSelect({ products, value, onChange, label = "Selecciona el produ
     }
 
     if (Array.isArray(products)) {
-      const stringToFind = `<script src='https://n8n-n8n.qxzsxx.easypanel.host/webhook/sendid?product=${urlId}'/>`;
+      const stringToFind = `<script src='https://n8n-n8n.qxzsxx.easypanel.host/webhook/sendid?product=${urlId}'></script>`;
       const matchingProduct = products.find(
         (p) => p.description && p.description.es && p.description.es.includes(stringToFind)
       );
