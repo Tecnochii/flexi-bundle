@@ -92,10 +92,14 @@ export const tiendaNubeAPI = async (endpoint: string, options: RequestInit = {})
     .then(json =>  json)
     .catch(err => {
 
-document.cookie = "tiendanube_user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-document.cookie = "tiendanube_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        window.location.reload();
+
+      console.log(err);
+      
+// document.cookie = "tiendanube_user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+// document.cookie = "tiendanube_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+//         window.location.reload();
 
     });
 
