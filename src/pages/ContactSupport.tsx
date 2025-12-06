@@ -91,7 +91,7 @@ const ContactSupport = () => {
   };
 
   const handleWhatsAppClick = () => {
-    const phone = '5491135659647';
+    const phone = '5491159285520';
     const message = encodeURIComponent('¡Hola! Necesito ayuda con TecnoBundles.');
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
@@ -150,7 +150,7 @@ const ContactSupport = () => {
             </div>
 
             {/* Email Card */}
-            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+            {/* <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
                   <Mail className="w-6 h-6 text-blue-600" />
@@ -165,7 +165,7 @@ const ContactSupport = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Phone Card */}
             <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
@@ -176,7 +176,7 @@ const ContactSupport = () => {
                 <div className="flex-1">
                   <h3 className="font-semibold text-lg mb-1">Teléfono</h3>
                   <p className="text-sm text-muted-foreground mb-2">
-                    +54 9 11 3565-9647
+                    +54 9 11 5928-5520
                   </p>
                   <p className="text-xs text-muted-foreground">
                     Lunes a Viernes: 9:00 - 18:00 (AR)

@@ -13,7 +13,7 @@ const PricingPage = () => {
   const [isAnnual, setIsAnnual] = useState(false);
 
   // Precios
-  const monthlyPrice = 25000;
+  const monthlyPrice = 0;
   const annualPrice = Math.round(monthlyPrice * 12 * 0.8); // 20% descuento anual
   const annualMonthlyPrice = Math.round(annualPrice / 12);
 
@@ -57,7 +57,7 @@ const PricingPage = () => {
         </div>
 
         {/* Toggle Mensual/Anual */}
-        <div className="flex items-center justify-center gap-4 mb-12">
+        {/* <div className="flex items-center justify-center gap-4 mb-12">
           <span className={`text-sm font-medium ${!isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
             Mensual
           </span>
@@ -81,7 +81,7 @@ const PricingPage = () => {
               Ahorrá 20%
             </span>
           )}
-        </div>
+        </div> */}
 
         {/* Pricing Card */}
         <div className="max-w-4xl mx-auto">
@@ -90,7 +90,8 @@ const PricingPage = () => {
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
               <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-accent px-4 py-1.5 text-sm font-semibold text-white shadow-lg">
                 <Zap className="h-4 w-4" />
-                <span>Más Popular</span>
+                {/* <span>Más Popular</span> */}
+                <span>Gratis por tiempo limitado</span>
               </div>
             </div>
 
