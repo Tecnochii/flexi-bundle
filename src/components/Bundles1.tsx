@@ -264,6 +264,8 @@ const handleApply = () => {
       }
     ).then((res) => res.json());
 
+
+    
     // 5. Múltiples peticiones para 'register-callback-cart' (UNA POR CADA DESCUENTO)
     const callbackCartPromises = discounts.map((discount) => {
       const cleanPrice = discount.pricefinal
@@ -286,6 +288,10 @@ const handleApply = () => {
         bxgy_reward_product_id: null,
         bxgy_reward_value: parseFloat(cleanPrice),
       };
+
+      console.log(dataCallbackCart);
+      
+
 
       return fetch(
         "https://n8n.tecnobundles.com/webhook/register-callback-cart",
