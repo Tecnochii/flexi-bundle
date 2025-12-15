@@ -55,7 +55,7 @@ let navigate =useNavigate();
 
     
 
-    let urlLoginTest = "https://n8n-n8n.qxzsxx.easypanel.host/webhook/verify?access_token="+access_token;
+    let urlLoginTest = "https://n8n.tecnobundles.com/webhook/verify?access_token="+access_token;
       fetch(urlLoginTest, {
     method: "GET",
     headers: {

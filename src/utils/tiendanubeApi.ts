@@ -86,7 +86,7 @@ export const tiendaNubeAPI = async (endpoint: string, options: RequestInit = {})
 
 
 
- const response = await fetch("https://n8n-n8n.qxzsxx.easypanel.host/webhook/productstn?user_id="+config.userId+"&endpoint="+endpoint+"&access_token="+config.accessToken, 
+ const response = await fetch("https://n8n.tecnobundles.com/webhook/productstn?user_id="+config.userId+"&endpoint="+endpoint+"&access_token="+config.accessToken, 
     { method: "GET" })
     .then(response => response.json())
     .then(json =>  json)

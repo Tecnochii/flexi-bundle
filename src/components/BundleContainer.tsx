@@ -198,13 +198,13 @@ const BundleContainer = ({fechaActivacion = ""}) => {
 
     if (access_token) {
       let urlLoginTest =
-        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token=" +
+        "https://n8n.tecnobundles.com/webhook/ofertas?access_token=" +
         access_token +
         "&product_id=" +
         product_id;
 
       let urlProducts =
-        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/complementos?access_token=" +
+        "https://n8n.tecnobundles.com/webhook/complementos?access_token=" +
         access_token +
         "&product_id=" +
         product_id;

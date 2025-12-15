@@ -88,7 +88,7 @@ const TablaProductos: React.FC<TablaProductosProps> = ({ items }) => {
 
     if (access_token) {
       try {
-        let url = `https://n8n-n8n.qxzsxx.easypanel.host/webhook/producto?access_token=${access_token}&product_id=${product_id_url}`;
+        let url = `https://n8n.tecnobundles.com/webhook/producto?access_token=${access_token}&product_id=${product_id_url}`;
 
         const response = await fetch(url, {
           method: "POST",

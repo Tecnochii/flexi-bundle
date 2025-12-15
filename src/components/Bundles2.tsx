@@ -80,7 +80,7 @@ const Bundles2 = ({
     if (typeof window !== 'undefined') {
       const param = new URLSearchParams(window.location.search);
       const product_id = param.get('id');
-      const scriptBase = '<script src="https://n8n-n8n.qxzsxx.easypanel.host/webhook/merchant?product=';
+      const scriptBase = '<script src="https://n8n.tecnobundles.com/webhook/merchant?product=';
       const scriptEnd = '">';
       setScriptContent(scriptBase + (product_id ?? 'ID_NO_ENCONTRADO') + scriptEnd);
     }
@@ -130,7 +130,7 @@ const handleApply = () => {
 
     // 2. Petición para 'scriptproduct'
     const scriptProductPromise = fetch(
-      "https://n8n-n8n.qxzsxx.easypanel.host/webhook/scriptproduct?access_token=" +
+      "https://n8n.tecnobundles.com/webhook/scriptproduct?access_token=" +
         tiendanube_token +
         "&user_id=" +
         tiendanube_user_id,
@@ -146,7 +146,7 @@ const handleApply = () => {
 
     // 3. Petición para 'ofertas'
     const ofertasPromise = fetch(
-      "https://n8n-n8n.qxzsxx.easypanel.host/webhook/ofertas?access_token=" +
+      "https://n8n.tecnobundles.com/webhook/ofertas?access_token=" +
         access_token +
         "&product_id=" +
         product_id,
@@ -169,7 +169,7 @@ const handleApply = () => {
 
     // 4. Petición para 'complementos' (la lista completa)
     const complementosPromise = fetch(
-      "https://n8n-n8n.qxzsxx.easypanel.host/webhook/complementos?access_token=" +
+      "https://n8n.tecnobundles.com/webhook/complementos?access_token=" +
         access_token +
         "&product_id=" +
         product_id,
@@ -208,7 +208,7 @@ const handleApply = () => {
       };
 
       return fetch(
-        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/register-callback-cart",
+        "https://n8n.tecnobundles.com/webhook/register-callback-cart",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -253,7 +253,7 @@ const handleApply = () => {
       };
       
       return fetch(
-        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/register-callback-cart",
+        "https://n8n.tecnobundles.com/webhook/register-callback-cart",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

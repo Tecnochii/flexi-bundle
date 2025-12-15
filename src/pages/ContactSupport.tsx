@@ -58,7 +58,7 @@ const ContactSupport = () => {
 
     try {
       // Aquí iría tu llamada a la API/n8n para enviar el mensaje
-      const response = await fetch('https://n8n-n8n.qxzsxx.easypanel.host/webhook/contact-support', {
+      const response = await fetch('https://n8n.tecnobundles.com/webhook/contact-support', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

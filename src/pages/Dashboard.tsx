@@ -122,7 +122,7 @@ const Dashboard = () => {
 
         // Llamada a tu API/n8n para obtener datos
         const response = await fetch(
-          `https://n8n-n8n.qxzsxx.easypanel.host/webhook/dashboard?access_token=${access_token}&range=${timeRange}`,
+          `https://n8n.tecnobundles.com/webhook/dashboard?access_token=${access_token}&range=${timeRange}`,
           {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },

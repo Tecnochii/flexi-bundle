@@ -12,7 +12,7 @@ const handleInstallApp = () => {
   setLoading(true);
   
   const CLIENT_ID = 22423;
-  const REDIRECT_URI = 'https://n8n-n8n.qxzsxx.easypanel.host/webhook/callback';
+  const REDIRECT_URI = 'https://n8n.tecnobundles.com/webhook/callback';
   
 
 

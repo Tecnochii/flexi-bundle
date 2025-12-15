@@ -19,7 +19,7 @@ const TiendaNubeCallback = () => {
     // Enviar el código a tu backend (n8n) para intercambiarlo por un access_token
     const exchangeCodeForToken = async () => {
       try {
-        const response = await fetch('https://n8n-n8n.qxzsxx.easypanel.host/webhook/tiendanube-auth', {
+        const response = await fetch('https://n8n.tecnobundles.com/webhook/tiendanube-auth', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

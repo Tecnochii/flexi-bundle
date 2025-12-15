@@ -76,7 +76,7 @@ function BundlesList() {
       token = tiendanube_token;
     }
 
-    fetch("https://n8n-n8n.qxzsxx.easypanel.host/webhook/tnid?token=" + token, {
+    fetch("https://n8n.tecnobundles.com/webhook/tnid?token=" + token, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -88,7 +88,7 @@ function BundlesList() {
         document.cookie = "tiendanube_user_id=" + data[0].user_id;
 
         fetch(
-          "https://n8n-n8n.qxzsxx.easypanel.host/webhook/adduseridtn?access_token=" +
+          "https://n8n.tecnobundles.com/webhook/adduseridtn?access_token=" +
             access_token +
             "&user_tn_id=" +
             data[0].user_id,
@@ -131,7 +131,7 @@ function BundlesList() {
 
     if (access_token) {
       let urlLoginTest =
-        "https://n8n-n8n.qxzsxx.easypanel.host/webhook/products?access_token=" +
+        "https://n8n.tecnobundles.com/webhook/products?access_token=" +
         access_token;
       fetch(urlLoginTest, {
         method: "GET",

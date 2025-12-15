@@ -28,11 +28,13 @@ function ProductSelect({ products, value, onChange, label = "Selecciona el produ
     }
 
     if (Array.isArray(products)) {
-      const stringToFind = `<script src='https://n8n-n8n.qxzsxx.easypanel.host/webhook/sendid?product=${urlId}'></script>`;
+      const stringToFind = `<script src="https://n8n.tecnobundles.com/webhook/sendid?product=${urlId}"></script>`;
+
+      
       const matchingProduct = products.find(
         (p) => p.description && p.description.es && p.description.es.includes(stringToFind)
       );
-
+      
       if (matchingProduct) {
         onChange({ target: { value: matchingProduct.id } });
       }
