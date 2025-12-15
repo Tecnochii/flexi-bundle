@@ -289,7 +289,6 @@ const handleApply = () => {
         bxgy_reward_value: parseFloat(cleanPrice),
       };
 
-      console.log(dataCallbackCart);
       
 
 
