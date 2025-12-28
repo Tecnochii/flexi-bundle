@@ -181,6 +181,13 @@ const Bundles1 = ({
     setSelected(index);
   };
 
+
+
+
+
+
+
+
 const handleApply = () => {
     setLoading(true);
     let access_token = obtenerCookie("access_token");
@@ -389,6 +396,55 @@ const handleApply = () => {
       });
   };
 
+
+const handleDelete = () =>{
+      setLoading(true);
+    let access_token = obtenerCookie("access_token");
+    let tiendanube_token = obtenerCookie("tiendanube_token");
+    let tiendanube_user_id = obtenerCookie("tiendanube_user_id");
+    let param = new URLSearchParams(window.location.search);
+    let product_id = param.get("id");
+
+    // 1. Validar datos clave
+    if (
+      !access_token ||
+      !tiendanube_user_id ||
+      !productoSeleccionado ||
+      !tiendanube_token
+    ) {
+      console.error("Faltan datos de cookie, token o producto seleccionado", {
+        access_token,
+        tiendanube_user_id,
+        productoSeleccionado,
+        tiendanube_token,
+      });
+      setLoading(false); 
+      return;
+    }
+
+
+
+  fetch(
+      "https://n8n.tecnobundles.com/webhook/scriptproduct?tiendanube_token=" +
+        tiendanube_token +
+        "&user_id=" +
+        tiendanube_user_id+"&product_tn_id="+productoSeleccionado,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+      }
+    ).then((res) => res.json())
+    .then((data) => {
+      setProductoSeleccionado('');
+        setLoading(false);
+        console.log("Script eliminado del producto.");
+    })
+  
+
+}
+
+
+
   const [loading, setLoading] = useState(false);
 
   const [selectedComplement, setSelectedComplement] = useState([]);
@@ -572,7 +628,7 @@ const [productoSeleccionado, setProductoSeleccionado] = useState("");
 
 
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center gap-4 ">
         <Button
         disabled={loading}
           onClick={(e) => {
@@ -580,7 +636,7 @@ const [productoSeleccionado, setProductoSeleccionado] = useState("");
 
           }}
           variant={"default"}
-          className="w-80 mt-4 shadow-md"
+          className="w-60 mt-4 shadow-md"
         >
 
 
@@ -608,6 +664,45 @@ const [productoSeleccionado, setProductoSeleccionado] = useState("");
 
           
         </Button>
+       { productoSeleccionado &&
+         <Button
+        disabled={loading}
+          onClick={(e) => {
+            handleDelete();
+
+          }}
+          variant={"destructive"}
+          className="w-60 mt-4 shadow-md"
+
+        >
+
+
+          {loading && (
+        <span
+          style={{
+            width: "16px",
+            height: "16px",
+            border: "2px solid white",
+            borderTopColor: "transparent",
+            borderRadius: "50%",
+            animation: "spin 0.8s linear infinite",
+          }}
+        />
+      )}
+      {loading ? "Borrando..." : "Borrar del producto"}
+      <style>
+        {`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+
+
+          
+        </Button>
+
+       }
       </div>
       <div className="flex justify-center">
 
