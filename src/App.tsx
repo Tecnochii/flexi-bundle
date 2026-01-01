@@ -16,6 +16,7 @@ import TermsOfService from "./pages/TermsOfService";
 import PricingPage from "./pages/PricingPage";
 import ContactSupport from "./pages/ContactSupport";
 import Dashboard from "./pages/Dashboard";
+import DashboardFacturacion from "./pages/DashboardFacturacion";
 
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/generador" element={<Index />} />
           <Route path="/list" element={<BundlesList />} />
           <Route path="/login" element={<LoginRegistro />} />
+          <Route path="/dashboard" element={<DashboardFacturacion />} />
           
           {/* 👇 NUEVAS RUTAS PARA TIENDA NUBE */}
           <Route path="/tiendanube-auth" element={<TiendaNubeAuth />} />
