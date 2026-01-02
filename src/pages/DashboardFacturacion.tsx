@@ -210,7 +210,7 @@ const DashboardFacturacion = () => {
 
       let data = await response.json();
       data = data.filter(order => order.payment_status == "paid")
-      // data = data.filter(order => order.promotional_discount?.promotions_applied[0]?.discount_script_type == "custom") 
+      data = data.filter(order => order.promotional_discount?.promotions_applied[0]?.discount_script_type == "custom") 
       setOrders(data);
       setStats(calculateStats(data));
       processChartData(data);
