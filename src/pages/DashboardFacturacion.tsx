@@ -89,7 +89,7 @@ const DashboardFacturacion = () => {
   // Estados para filtros de fecha
   const [startDate, setStartDate] = useState(() => {
     const today = new Date();
-    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    const firstDay = new Date(today.getFullYear(), today.getMonth() - 1, 1);
     return firstDay.toISOString().split('T')[0];
   });
   const [endDate, setEndDate] = useState(() => {
@@ -114,6 +114,11 @@ const DashboardFacturacion = () => {
 
   // Calcular estadísticas
   const calculateStats = (ordersData: Order[]): Stats => {
+
+    ordersData = ordersData
+    console.log(ordersData);
+
+    
     const totalOrders = ordersData.length;
     const totalRevenue = ordersData.reduce((sum, order) => {
       return sum + parseFloat(order.total || '0');
@@ -203,7 +208,9 @@ const DashboardFacturacion = () => {
         throw new Error('Error al cargar las órdenes');
       }
 
-      const data = await response.json();
+      let data = await response.json();
+      data = data.filter(order => order.payment_status == "paid")
+      data = data.filter(order => order.promotional_discount?.promotions_applied[0]?.discount_script_type == "custom")
       setOrders(data);
       setStats(calculateStats(data));
       processChartData(data);
@@ -624,7 +631,7 @@ const DashboardFacturacion = () => {
             <div className="bg-white rounded-lg border shadow-sm">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-sm font-medium text-gray-600">Total Órdenes</h3>
+                  <h3 className="text-sm font-medium text-gray-600">Total Órdenes Aplicadas con la App</h3>
                   <ShoppingCart className="h-4 w-4 text-blue-600" />
                 </div>
                 <div className="text-2xl font-bold">{stats.totalOrders}</div>
