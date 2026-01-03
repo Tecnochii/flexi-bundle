@@ -21,13 +21,11 @@ const PricingPage = () => {
   const features = [
     'Bundles ilimitados',
     'Productos ilimitados',
-    'Personalización completa de diseño',
     '2 estilos premium (Clásico y Moderno)',
     'Complementos de productos',
     'Soporte por email y WhatsApp',
     'Actualizaciones automáticas',
     'Analíticas básicas',
-    'Sin comisiones por venta',
     'Instalación en 10 minutos'
   ];
 
