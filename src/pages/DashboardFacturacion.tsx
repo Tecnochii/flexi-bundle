@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   DollarSign,
   ShoppingCart,
@@ -12,8 +12,8 @@ import {
   XCircle,
   Clock,
   BarChart3,
-  PieChart as PieChartIcon
-} from 'lucide-react';
+  PieChart as PieChartIcon,
+} from "lucide-react";
 import {
   LineChart,
   Line,
@@ -29,8 +29,9 @@ import {
   Legend,
   ResponsiveContainer,
   Area,
-  AreaChart
-} from 'recharts';
+  AreaChart,
+} from "recharts";
+import { Button } from "@/components/ui/button";
 
 // Interfaces
 interface Order {
@@ -82,27 +83,29 @@ const DashboardFacturacion = () => {
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [dailyData, setDailyData] = useState<DailyData[]>([]);
-  const [paymentMethodData, setPaymentMethodData] = useState<PaymentMethodData[]>([]);
+  const [paymentMethodData, setPaymentMethodData] = useState<
+    PaymentMethodData[]
+  >([]);
 
   // Estados para filtros de fecha
   const [startDate, setStartDate] = useState(() => {
     const today = new Date();
     const firstDay = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-    return firstDay.toISOString().split('T')[0];
+    return firstDay.toISOString().split("T")[0];
   });
   const [endDate, setEndDate] = useState(() => {
-    return new Date().toISOString().split('T')[0];
+    return new Date().toISOString().split("T")[0];
   });
 
   // Función para obtener cookies
   const getCookie = (nombre: string): string | null => {
     const nombreBuscado = nombre + "=";
-    const cookiesArray = decodeURIComponent(document.cookie).split(';');
+    const cookiesArray = decodeURIComponent(document.cookie).split(";");
     for (let i = 0; i < cookiesArray.length; i++) {
       let cookie = cookiesArray[i];
-      while (cookie.charAt(0) === ' ') {
+      while (cookie.charAt(0) === " ") {
         cookie = cookie.substring(1);
       }
       if (cookie.indexOf(nombreBuscado) === 0) {
@@ -114,17 +117,19 @@ const DashboardFacturacion = () => {
 
   // Calcular estadísticas
   const calculateStats = (ordersData: Order[]): Stats => {
-
-    ordersData = ordersData
+    ordersData = ordersData;
     console.log(ordersData);
 
-    
     const totalOrders = ordersData.length;
     const totalRevenue = ordersData.reduce((sum, order) => {
-      return sum + parseFloat(order.total || '0');
+      return sum + parseFloat(order.total || "0");
     }, 0);
-    const paidOrders = ordersData.filter(o => o.payment_status === 'paid').length;
-    const cancelledOrders = ordersData.filter(o => o.status === 'cancelled').length;
+    const paidOrders = ordersData.filter(
+      (o) => o.payment_status === "paid"
+    ).length;
+    const cancelledOrders = ordersData.filter(
+      (o) => o.status === "cancelled"
+    ).length;
     const averageOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
     return {
@@ -132,7 +137,7 @@ const DashboardFacturacion = () => {
       totalRevenue,
       paidOrders,
       cancelledOrders,
-      averageOrderValue
+      averageOrderValue,
     };
   };
 
@@ -140,11 +145,11 @@ const DashboardFacturacion = () => {
   const processChartData = (ordersData: Order[]) => {
     // Agrupar por día
     const dailyMap = new Map<string, { revenue: number; orders: number }>();
-    
-    ordersData.forEach(order => {
-      const date = new Date(order.created_at).toISOString().split('T')[0];
+
+    ordersData.forEach((order) => {
+      const date = new Date(order.created_at).toISOString().split("T")[0];
       const current = dailyMap.get(date) || { revenue: 0, orders: 0 };
-      current.revenue += parseFloat(order.total || '0');
+      current.revenue += parseFloat(order.total || "0");
       current.orders += 1;
       dailyMap.set(date, current);
     });
@@ -153,7 +158,7 @@ const DashboardFacturacion = () => {
       .map(([date, data]) => ({
         date,
         revenue: data.revenue,
-        orders: data.orders
+        orders: data.orders,
       }))
       .sort((a, b) => a.date.localeCompare(b.date));
 
@@ -163,10 +168,10 @@ const DashboardFacturacion = () => {
     const paymentMap = new Map<string, number>();
     let totalAmount = 0;
 
-    ordersData.forEach(order => {
-      if (order.payment_status === 'paid') {
-        const method = order.gateway_name || 'Otros';
-        const amount = parseFloat(order.total || '0');
+    ordersData.forEach((order) => {
+      if (order.payment_status === "paid") {
+        const method = order.gateway_name || "Otros";
+        const amount = parseFloat(order.total || "0");
         paymentMap.set(method, (paymentMap.get(method) || 0) + amount);
         totalAmount += amount;
       }
@@ -176,7 +181,7 @@ const DashboardFacturacion = () => {
       .map(([name, value]) => ({
         name,
         value,
-        percentage: (value / totalAmount) * 100
+        percentage: (value / totalAmount) * 100,
       }))
       .sort((a, b) => b.value - a.value);
 
@@ -187,36 +192,42 @@ const DashboardFacturacion = () => {
   const loadOrders = async () => {
     try {
       setLoading(true);
-      setError('');
+      setError("");
 
-      const accessToken = getCookie('tiendanube_token');
-      const userId = getCookie('tiendanube_user_id');
+      const accessToken = getCookie("tiendanube_token");
+      const userId = getCookie("tiendanube_user_id");
 
       if (!accessToken || !userId) {
-        setError('No se encontró la sesión. Por favor, vuelve a iniciar sesión.');
+        setError(
+          "No se encontró la sesión. Por favor, vuelve a iniciar sesión."
+        );
         return;
       }
 
       const url = `https://n8n.tecnobundles.com/webhook/ordenes?access_token=${accessToken}&user_id=${userId}&fecha=${startDate}&fecha_max=${endDate}`;
 
       const response = await fetch(url, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
       });
 
       if (!response.ok) {
-        throw new Error('Error al cargar las órdenes');
+        throw new Error("Error al cargar las órdenes");
       }
 
       let data = await response.json();
-      data = data.filter(order => order.payment_status == "paid")
-      data = data.filter(order => order.promotional_discount?.promotions_applied[0]?.discount_script_type == "custom") 
+      data = data.filter((order) => order.payment_status == "paid");
+      data = data.filter(
+        (order) =>
+          order.promotional_discount?.promotions_applied[0]
+            ?.discount_script_type == "custom"
+      );
       setOrders(data);
       setStats(calculateStats(data));
       processChartData(data);
     } catch (err) {
-      console.error('Error:', err);
-      setError('Error al cargar los datos. Por favor, intenta nuevamente.');
+      console.error("Error:", err);
+      setError("Error al cargar los datos. Por favor, intenta nuevamente.");
     } finally {
       setLoading(false);
     }
@@ -229,35 +240,45 @@ const DashboardFacturacion = () => {
 
   // Formatear moneda
   const formatCurrency = (value: string | number) => {
-    const numValue = typeof value === 'string' ? parseFloat(value) : value;
-    return new Intl.NumberFormat('es-AR', {
-      style: 'currency',
-      currency: 'ARS',
-      minimumFractionDigits: 2
+    const numValue = typeof value === "string" ? parseFloat(value) : value;
+    return new Intl.NumberFormat("es-AR", {
+      style: "currency",
+      currency: "ARS",
+      minimumFractionDigits: 2,
     }).format(numValue);
   };
 
   // Formatear fecha para gráficos
   const formatDateForChart = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-AR', {
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("es-AR", {
+      month: "short",
+      day: "numeric",
     });
   };
 
   // Colores para gráficos
-  const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'];
+  const COLORS = [
+    "#3b82f6",
+    "#8b5cf6",
+    "#ec4899",
+    "#f59e0b",
+    "#10b981",
+    "#06b6d4",
+  ];
 
   // Tooltip personalizado para recharts
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-semibold text-sm mb-2">{formatDateForChart(label)}</p>
+          <p className="font-semibold text-sm mb-2">
+            {formatDateForChart(label)}
+          </p>
           {payload.map((entry: any, index: number) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
-              {entry.name}: {entry.name.includes('Revenue') || entry.name.includes('Ingresos') 
-                ? formatCurrency(entry.value) 
+              {entry.name}:{" "}
+              {entry.name.includes("Revenue") || entry.name.includes("Ingresos")
+                ? formatCurrency(entry.value)
                 : entry.value}
             </p>
           ))}
@@ -269,28 +290,30 @@ const DashboardFacturacion = () => {
 
   // Formatear fecha completa
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-AR', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("es-AR", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   // Obtener badge de estado
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      open: { label: 'Abierta', className: 'bg-blue-100 text-blue-800' },
-      closed: { label: 'Cerrada', className: 'bg-gray-100 text-gray-800' },
-      cancelled: { label: 'Cancelada', className: 'bg-red-100 text-red-800' }
+      open: { label: "Abierta", className: "bg-blue-100 text-blue-800" },
+      closed: { label: "Cerrada", className: "bg-gray-100 text-gray-800" },
+      cancelled: { label: "Cancelada", className: "bg-red-100 text-red-800" },
     };
-    const config = statusConfig[status as keyof typeof statusConfig] || { 
-      label: status, 
-      className: 'bg-gray-100 text-gray-800' 
+    const config = statusConfig[status as keyof typeof statusConfig] || {
+      label: status,
+      className: "bg-gray-100 text-gray-800",
     };
     return (
-      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${config.className}`}>
+      <span
+        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${config.className}`}
+      >
         {config.label}
       </span>
     );
@@ -299,14 +322,14 @@ const DashboardFacturacion = () => {
   // Obtener badge de pago
   const getPaymentBadge = (paymentStatus: string) => {
     const statusConfig = {
-      paid: { label: 'Pagada', icon: CheckCircle, color: 'text-green-600' },
-      pending: { label: 'Pendiente', icon: Clock, color: 'text-yellow-600' },
-      refunded: { label: 'Reembolsada', icon: XCircle, color: 'text-red-600' }
+      paid: { label: "Pagada", icon: CheckCircle, color: "text-green-600" },
+      pending: { label: "Pendiente", icon: Clock, color: "text-yellow-600" },
+      refunded: { label: "Reembolsada", icon: XCircle, color: "text-red-600" },
     };
-    const config = statusConfig[paymentStatus as keyof typeof statusConfig] || { 
-      label: paymentStatus, 
-      icon: AlertCircle, 
-      color: 'text-gray-600' 
+    const config = statusConfig[paymentStatus as keyof typeof statusConfig] || {
+      label: paymentStatus,
+      icon: AlertCircle,
+      color: "text-gray-600",
     };
     const Icon = config.icon;
     return (
@@ -319,23 +342,23 @@ const DashboardFacturacion = () => {
 
   // Exportar a CSV
   const exportToCSV = () => {
-    const headers = ['Número', 'Fecha', 'Cliente', 'Total', 'Estado', 'Pago'];
-    const rows = orders.map(order => [
+    const headers = ["Número", "Fecha", "Cliente", "Total", "Estado", "Pago"];
+    const rows = orders.map((order) => [
       order.number,
       formatDate(order.created_at),
       order.contact_name,
       order.total,
       order.status,
-      order.payment_status
+      order.payment_status,
     ]);
 
     const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.join(','))
-    ].join('\n');
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
+    ].join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `ordenes_${startDate}_${endDate}.csv`;
     link.click();
@@ -348,11 +371,15 @@ const DashboardFacturacion = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard de Facturación</h1>
-              <p className="text-gray-600 mt-1">Análisis detallado de tus ventas</p>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Dashboard de Facturación
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Análisis detallado de tus ventas
+              </p>
             </div>
-            <button 
-              onClick={goBack} 
+            <button
+              onClick={goBack}
               className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
             >
               Volver a Bundles
@@ -371,7 +398,10 @@ const DashboardFacturacion = () => {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
-                <label htmlFor="startDate" className="block text-sm font-medium mb-1">
+                <label
+                  htmlFor="startDate"
+                  className="block text-sm font-medium mb-1"
+                >
                   Fecha Inicio
                 </label>
                 <input
@@ -383,7 +413,10 @@ const DashboardFacturacion = () => {
                 />
               </div>
               <div>
-                <label htmlFor="endDate" className="block text-sm font-medium mb-1">
+                <label
+                  htmlFor="endDate"
+                  className="block text-sm font-medium mb-1"
+                >
                   Fecha Fin
                 </label>
                 <input
@@ -395,8 +428,8 @@ const DashboardFacturacion = () => {
                 />
               </div>
               <div className="flex items-end">
-                <button 
-                  onClick={loadOrders} 
+                <button
+                  onClick={loadOrders}
                   disabled={loading}
                   className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
                 >
@@ -414,8 +447,8 @@ const DashboardFacturacion = () => {
                 </button>
               </div>
               <div className="flex items-end">
-                <button 
-                  onClick={exportToCSV} 
+                <button
+                  onClick={exportToCSV}
                   disabled={orders.length === 0}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:bg-gray-100 disabled:cursor-not-allowed flex items-center justify-center"
                 >
@@ -451,27 +484,41 @@ const DashboardFacturacion = () => {
                 <ResponsiveContainer width="100%" height={300}>
                   <AreaChart data={dailyData}>
                     <defs>
-                      <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                      <linearGradient
+                        id="colorRevenue"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="#3b82f6"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#3b82f6"
+                          stopOpacity={0}
+                        />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis 
-                      dataKey="date" 
+                    <XAxis
+                      dataKey="date"
                       tickFormatter={formatDateForChart}
-                      style={{ fontSize: '12px' }}
+                      style={{ fontSize: "12px" }}
                     />
-                    <YAxis 
+                    <YAxis
                       tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
-                      style={{ fontSize: '12px' }}
+                      style={{ fontSize: "12px" }}
                     />
                     <Tooltip content={<CustomTooltip />} />
-                    <Area 
-                      type="monotone" 
-                      dataKey="revenue" 
-                      stroke="#3b82f6" 
-                      fillOpacity={1} 
+                    <Area
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke="#3b82f6"
+                      fillOpacity={1}
                       fill="url(#colorRevenue)"
                       name="Ingresos"
                     />
@@ -496,14 +543,19 @@ const DashboardFacturacion = () => {
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={dailyData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis 
-                      dataKey="date" 
+                    <XAxis
+                      dataKey="date"
                       tickFormatter={formatDateForChart}
-                      style={{ fontSize: '12px' }}
+                      style={{ fontSize: "12px" }}
                     />
-                    <YAxis style={{ fontSize: '12px' }} />
+                    <YAxis style={{ fontSize: "12px" }} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Bar dataKey="orders" fill="#8b5cf6" name="Órdenes" radius={[8, 8, 0, 0]} />
+                    <Bar
+                      dataKey="orders"
+                      fill="#8b5cf6"
+                      name="Órdenes"
+                      radius={[8, 8, 0, 0]}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
@@ -535,10 +587,13 @@ const DashboardFacturacion = () => {
                         dataKey="value"
                       >
                         {paymentMethodData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={COLORS[index % COLORS.length]}
+                          />
                         ))}
                       </Pie>
-                      <Tooltip 
+                      <Tooltip
                         formatter={(value: number) => formatCurrency(value)}
                       />
                     </PieChart>
@@ -546,14 +601,17 @@ const DashboardFacturacion = () => {
                   <div className="space-y-2">
                     {paymentMethodData.map((entry, index) => (
                       <div key={index} className="flex items-center gap-2">
-                        <div 
-                          className="w-3 h-3 rounded-full" 
-                          style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{
+                            backgroundColor: COLORS[index % COLORS.length],
+                          }}
                         />
                         <div className="text-sm">
                           <p className="font-medium">{entry.name}</p>
                           <p className="text-gray-500">
-                            {formatCurrency(entry.value)} ({entry.percentage.toFixed(1)}%)
+                            {formatCurrency(entry.value)} (
+                            {entry.percentage.toFixed(1)}%)
                           </p>
                         </div>
                       </div>
@@ -579,40 +637,40 @@ const DashboardFacturacion = () => {
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={dailyData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis 
-                      dataKey="date" 
+                    <XAxis
+                      dataKey="date"
                       tickFormatter={formatDateForChart}
-                      style={{ fontSize: '12px' }}
+                      style={{ fontSize: "12px" }}
                     />
-                    <YAxis 
+                    <YAxis
                       yAxisId="left"
                       tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
-                      style={{ fontSize: '12px' }}
+                      style={{ fontSize: "12px" }}
                     />
-                    <YAxis 
-                      yAxisId="right" 
+                    <YAxis
+                      yAxisId="right"
                       orientation="right"
-                      style={{ fontSize: '12px' }}
+                      style={{ fontSize: "12px" }}
                     />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
-                    <Line 
+                    <Line
                       yAxisId="left"
-                      type="monotone" 
-                      dataKey="revenue" 
-                      stroke="#f59e0b" 
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke="#f59e0b"
                       strokeWidth={2}
                       name="Ingresos"
-                      dot={{ fill: '#f59e0b' }}
+                      dot={{ fill: "#f59e0b" }}
                     />
-                    <Line 
+                    <Line
                       yAxisId="right"
-                      type="monotone" 
-                      dataKey="orders" 
-                      stroke="#10b981" 
+                      type="monotone"
+                      dataKey="orders"
+                      stroke="#10b981"
                       strokeWidth={2}
                       name="Órdenes"
-                      dot={{ fill: '#10b981' }}
+                      dot={{ fill: "#10b981" }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -631,7 +689,9 @@ const DashboardFacturacion = () => {
             <div className="bg-white rounded-lg border shadow-sm">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-sm font-medium text-gray-600">Total Órdenes Aplicadas con la App</h3>
+                  <h3 className="text-sm font-medium text-gray-600">
+                    Total Órdenes Aplicadas con la App
+                  </h3>
                   <ShoppingCart className="h-4 w-4 text-blue-600" />
                 </div>
                 <div className="text-2xl font-bold">{stats.totalOrders}</div>
@@ -641,30 +701,42 @@ const DashboardFacturacion = () => {
             <div className="bg-white rounded-lg border shadow-sm">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-sm font-medium text-gray-600">Facturación Total</h3>
+                  <h3 className="text-sm font-medium text-gray-600">
+                    Facturación Total
+                  </h3>
                   <DollarSign className="h-4 w-4 text-green-600" />
                 </div>
-                <div className="text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</div>
+                <div className="text-2xl font-bold">
+                  {formatCurrency(stats.totalRevenue)}
+                </div>
               </div>
             </div>
 
             <div className="bg-white rounded-lg border shadow-sm">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-sm font-medium text-gray-600">Ticket Promedio</h3>
+                  <h3 className="text-sm font-medium text-gray-600">
+                    Ticket Promedio
+                  </h3>
                   <TrendingUp className="h-4 w-4 text-purple-600" />
                 </div>
-                <div className="text-2xl font-bold">{formatCurrency(stats.averageOrderValue)}</div>
+                <div className="text-2xl font-bold">
+                  {formatCurrency(stats.averageOrderValue)}
+                </div>
               </div>
             </div>
 
             <div className="bg-white rounded-lg border shadow-sm">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-sm font-medium text-gray-600">Órdenes Pagadas</h3>
+                  <h3 className="text-sm font-medium text-gray-600">
+                    Órdenes Pagadas
+                  </h3>
                   <CheckCircle className="h-4 w-4 text-green-600" />
                 </div>
-                <div className="text-2xl font-bold text-green-600">{stats.paidOrders}</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {stats.paidOrders}
+                </div>
                 <p className="text-xs text-gray-500 mt-1">
                   {((stats.paidOrders / stats.totalOrders) * 100).toFixed(1)}%
                 </p>
@@ -674,68 +746,141 @@ const DashboardFacturacion = () => {
             <div className="bg-white rounded-lg border shadow-sm">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-sm font-medium text-gray-600">Órdenes Canceladas</h3>
+                  <h3 className="text-sm font-medium text-gray-600">
+                    Órdenes Canceladas
+                  </h3>
                   <XCircle className="h-4 w-4 text-red-600" />
                 </div>
-                <div className="text-2xl font-bold text-red-600">{stats.cancelledOrders}</div>
+                <div className="text-2xl font-bold text-red-600">
+                  {stats.cancelledOrders}
+                </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  {((stats.cancelledOrders / stats.totalOrders) * 100).toFixed(1)}%
+                  {((stats.cancelledOrders / stats.totalOrders) * 100).toFixed(
+                    1
+                  )}
+                  %
                 </p>
               </div>
             </div>
           </div>
         )}
 
+        {/* TOTAL A PAGAR */}
+        <div className="bg-white rounded-lg border shadow-sm mb-8">
+          <div className="p-6">
+            <h3 className="text-lg font-semibold mb-2">Total a Pagar</h3>
+
+            <div className="overflow-x-auto flex justify-between">
+              <div className="text-2xl font-bold">
+                {formatCurrency(stats?.totalRevenue)}
+              </div>
+              
+            <Button variant="default">Pagar</Button>
+            </div>
+          </div>
+        </div>
+
         {/* Tabla de Órdenes */}
-        <div className="bg-white rounded-lg border shadow-sm">
+        <div className="bg-white rounded-lg border shadow-sm ">
           <div className="p-6">
             <h3 className="text-lg font-semibold mb-2">Detalle de Órdenes</h3>
-            <p className="text-sm text-gray-600 mb-4">{orders.length} órdenes encontradas</p>
+            <p className="text-sm text-gray-600 mb-4">
+              {orders.length} órdenes encontradas
+            </p>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="border-b">
                   <tr>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Nº Orden</th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Fecha</th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Cliente</th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Email</th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Productos</th>
-                    <th className="text-right py-3 px-4 font-medium text-sm">Subtotal</th>
-                    <th className="text-right py-3 px-4 font-medium text-sm">Envío</th>
-                    <th className="text-right py-3 px-4 font-medium text-sm">Descuento</th>
-                    <th className="text-right py-3 px-4 font-medium text-sm">Total</th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Pago</th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Estado</th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Método</th>
+                    <th className="text-left py-3 px-4 font-medium text-sm">
+                      Nº Orden
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium text-sm">
+                      Fecha
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium text-sm">
+                      Cliente
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium text-sm">
+                      Email
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium text-sm">
+                      Productos
+                    </th>
+                    <th className="text-right py-3 px-4 font-medium text-sm">
+                      Subtotal
+                    </th>
+                    <th className="text-right py-3 px-4 font-medium text-sm">
+                      Envío
+                    </th>
+                    <th className="text-right py-3 px-4 font-medium text-sm">
+                      Descuento
+                    </th>
+                    <th className="text-right py-3 px-4 font-medium text-sm">
+                      Total
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium text-sm">
+                      Pago
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium text-sm">
+                      Estado
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium text-sm">
+                      Método
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {orders.length === 0 ? (
                     <tr>
-                      <td colSpan={12} className="text-center py-8 text-gray-500">
+                      <td
+                        colSpan={12}
+                        className="text-center py-8 text-gray-500"
+                      >
                         No se encontraron órdenes en el período seleccionado
                       </td>
                     </tr>
                   ) : (
                     orders.map((order) => (
                       <tr key={order.id} className="border-b hover:bg-gray-50">
-                        <td className="py-3 px-4 font-medium">#{order.number}</td>
-                        <td className="py-3 px-4 text-sm">{formatDate(order.created_at)}</td>
+                        <td className="py-3 px-4 font-medium">
+                          #{order.number}
+                        </td>
+                        <td className="py-3 px-4 text-sm">
+                          {formatDate(order.created_at)}
+                        </td>
                         <td className="py-3 px-4">{order.contact_name}</td>
-                        <td className="py-3 px-4 text-sm">{order.contact_email}</td>
+                        <td className="py-3 px-4 text-sm">
+                          {order.contact_email}
+                        </td>
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-1">
                             <Package className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm">{order.products.length}</span>
+                            <span className="text-sm">
+                              {order.products.length}
+                            </span>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-right">{formatCurrency(order.subtotal)}</td>
-                        <td className="py-3 px-4 text-right">{formatCurrency(order.shipping_cost_customer)}</td>
-                        <td className="py-3 px-4 text-right text-red-600">-{formatCurrency(order.discount)}</td>
-                        <td className="py-3 px-4 text-right font-bold">{formatCurrency(order.total)}</td>
-                        <td className="py-3 px-4">{getPaymentBadge(order.payment_status)}</td>
-                        <td className="py-3 px-4">{getStatusBadge(order.status)}</td>
-                        <td className="py-3 px-4 text-sm">{order.gateway_name}</td>
+                        <td className="py-3 px-4 text-right">
+                          {formatCurrency(order.subtotal)}
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          {formatCurrency(order.shipping_cost_customer)}
+                        </td>
+                        <td className="py-3 px-4 text-right text-red-600">
+                          -{formatCurrency(order.discount)}
+                        </td>
+                        <td className="py-3 px-4 text-right font-bold">
+                          {formatCurrency(order.total)}
+                        </td>
+                        <td className="py-3 px-4">
+                          {getPaymentBadge(order.payment_status)}
+                        </td>
+                        <td className="py-3 px-4">
+                          {getStatusBadge(order.status)}
+                        </td>
+                        <td className="py-3 px-4 text-sm">
+                          {order.gateway_name}
+                        </td>
                       </tr>
                     ))
                   )}

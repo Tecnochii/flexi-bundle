@@ -85,90 +85,95 @@ const PricingPage = () => {
 
         {/* Pricing Card */}
         <div className="max-w-4xl mx-auto">
-          <div className="relative">
-            {/* Badge "Más Popular" */}
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-accent px-4 py-1.5 text-sm font-semibold text-white shadow-lg">
-                <Zap className="h-4 w-4" />
-                {/* <span>Más Popular</span> */}
-                <span>Gratis por tiempo limitado</span>
-              </div>
-            </div>
-
-            <div className="bg-card border-2 border-primary/20 rounded-2xl p-8 md:p-12 shadow-xl hover:shadow-2xl transition-shadow">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold mb-2">Plan Profesional</h3>
-                <p className="text-muted-foreground mb-6">
-                  Todo lo que necesitás para aumentar tus ventas
-                </p>
-
-                {/* Precio */}
-                <div className="mb-6">
-                  {isAnnual && (
-                    <div className="text-sm text-muted-foreground line-through mb-1">
-                      ${monthlyPrice.toLocaleString('es-AR')}/mes
+                  <div className="relative">
+                    {/* Badge "Más Popular" */}
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                      <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-accent px-4 py-1.5 text-sm font-semibold text-white shadow-lg">
+                        <Zap className="h-4 w-4" />
+                        {/* <span>Más Popular</span> */}
+                        <span>Instalacion gratuita</span>
+                      </div>
                     </div>
-                  )}
-                  <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-5xl font-bold">
-                      ${isAnnual ? annualMonthlyPrice.toLocaleString('es-AR') : monthlyPrice.toLocaleString('es-AR')}
-                    </span>
-                    <span className="text-muted-foreground">/mes</span>
-                  </div>
-                  {isAnnual && (
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Facturado ${annualPrice.toLocaleString('es-AR')} anualmente
-                    </p>
-                  )}
-                </div>
-
-                {/* Trial Badge */}
-                <div className="inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-4 py-2 text-sm font-medium text-green-700 mb-6">
-                  <Check className="h-4 w-4" />
-                  <span>7 días de prueba gratis</span>
-                </div>
-
-                {/* CTA Button */}
-                <Button 
-                  onClick={handleGetStarted}
-                  size="lg" 
-                  className="w-full text-base font-semibold mb-4"
-                >
-                  Comenzar prueba gratuita
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                {/* <p className="text-xs text-muted-foreground">
-                  Sin tarjeta de crédito requerida
-                </p> */}
-              </div>
-
-              {/* Features List */}
-              <div className="border-t pt-8">
-                <h4 className="font-semibold mb-4 text-center">Todo incluido:</h4>
-                <div className="grid md:grid-cols-2 gap-3">
-                  {features.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-0.5">
-                        <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Check className="h-3 w-3 text-primary" />
+        
+                    <div className="bg-card border-2 border-primary/20 rounded-2xl p-8 md:p-12 shadow-xl hover:shadow-2xl transition-shadow">
+                      <div className="text-center mb-8">
+                        <h3 className="text-2xl font-bold mb-2">Empeza hoy</h3>
+                        <p className="text-muted-foreground mb-6">
+                          Todo lo que necesitás para aumentar tus ventas
+                        </p>
+        
+                        {/* Precio */}
+                        <div className="mb-6">
+                          {isAnnual && (
+                            <>
+                            <div className="text-sm text-muted-foreground line-through mb-1">
+                              ${monthlyPrice.toLocaleString('es-AR')}/mes
+                            </div>
+        </>
+                          )}
+                          <div className="flex items-baseline justify-center gap-2">
+                            <span className="text-5xl font-bold">
+                              ${isAnnual ? annualMonthlyPrice.toLocaleString('es-AR') : monthlyPrice.toLocaleString('es-AR')}
+                            </span>
+                            <span className="text-muted-foreground">/mes</span>
+        
+                          </div>
+                            <div>Pagas 3% de comisiones por venta generada por Tecnobundles.</div>
+        
+                          {isAnnual && (
+                            <p className="text-sm text-muted-foreground mt-2">
+                              Facturado ${annualPrice.toLocaleString('es-AR')} anualmente
+                            </p>
+                          )}
+                        </div>
+        
+                        {/* Trial Badge */}
+                        {/* <div className="inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-4 py-2 text-sm font-medium text-green-700 mb-6">
+                          <Check className="h-4 w-4" />
+                          <span>7 días de prueba gratis</span>
+                        </div> */}
+        
+                        {/* CTA Button */}
+                        <Button 
+                          onClick={handleGetStarted}
+                          size="lg" 
+                          className="w-full text-base font-semibold mb-4"
+                        >
+                          Comenzar ahora
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Button>
+                        {/* <p className="text-xs text-muted-foreground">
+                          Sin tarjeta de crédito requerida
+                        </p> */}
+                      </div>
+        
+                      {/* Features List */}
+                      <div className="border-t pt-8">
+                        <h4 className="font-semibold mb-4 text-center">Todo incluido:</h4>
+                        <div className="grid md:grid-cols-2 gap-3">
+                          {features.map((feature, index) => (
+                            <div key={index} className="flex items-start gap-3">
+                              <div className="flex-shrink-0 mt-0.5">
+                                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
+                                  <Check className="h-3 w-3 text-primary" />
+                                </div>
+                              </div>
+                              <span className="text-sm text-muted-foreground">{feature}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                      <span className="text-sm text-muted-foreground">{feature}</span>
+        
+                      {/* Garantía */}
+                      {/* <div className="mt-8 pt-6 border-t text-center">
+                        <p className="text-sm text-muted-foreground">
+                          <strong className="text-foreground">Garantía de 30 días:</strong> Si no estás satisfecho, 
+                          te devolvemos tu dinero. Sin preguntas.
+                        </p>
+                      </div> */}
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-
-              {/* Garantía */}
-              <div className="mt-8 pt-6 border-t text-center">
-                <p className="text-sm text-muted-foreground">
-                  <strong className="text-foreground">Garantía de 30 días:</strong> Si no estás satisfecho, 
-                  te devolvemos tu dinero. Sin preguntas.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* FAQ Section */}
         <div className="mt-16 max-w-3xl mx-auto">
@@ -182,13 +187,13 @@ const PricingPage = () => {
               </p>
             </div>
 
-            <div className="bg-card border rounded-lg p-6">
+            {/* <div className="bg-card border rounded-lg p-6">
               <h4 className="font-semibold mb-2">¿Qué incluye la prueba gratuita?</h4>
               <p className="text-sm text-muted-foreground">
                 La prueba de 7 días incluye acceso completo a todas las funcionalidades sin 
                 restricciones. No necesitás ingresar datos de tarjeta de crédito.
               </p>
-            </div>
+            </div> */}
 
             <div className="bg-card border rounded-lg p-6">
               <h4 className="font-semibold mb-2">¿Hay límite de productos o bundles?</h4>
@@ -201,8 +206,9 @@ const PricingPage = () => {
             <div className="bg-card border rounded-lg p-6">
               <h4 className="font-semibold mb-2">¿Cobran comisión por ventas?</h4>
               <p className="text-sm text-muted-foreground">
-                No. Solo pagás la suscripción mensual fija. No cobramos ningún porcentaje 
-                de tus ventas.
+                Si. Se cobra un 3% de comisión por venta generada por Tecnobundles. 
+                Los pagos se procesan de forma segura.
+                Cada 15 dias se cobran las comisiones pendientes.
               </p>
             </div>
 
@@ -233,17 +239,17 @@ const PricingPage = () => {
             <Button
               variant="outline"
               size="lg"
-              onClick={() => window.open('https://wa.me/5492213531405?text=Hola,%20tengo%20consultas%20sobre%20TecnoBundles', '_blank')}
+              onClick={() => window.open('https://wa.me/541159285520?text=Hola,%20tengo%20consultas%20sobre%20TecnoBundles', '_blank')}
             >
               Contactar por WhatsApp
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               size="lg"
               onClick={() => window.location.href = 'mailto:soporte@tecnobundles.com'}
             >
               Enviar Email
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

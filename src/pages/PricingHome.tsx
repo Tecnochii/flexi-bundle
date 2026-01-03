@@ -18,13 +18,13 @@ const PricingHome = () => {
   const features = [
     'Bundles ilimitados',
     'Productos ilimitados',
-    'Personalización completa de diseño',
+    // 'Personalización completa de diseño',
     '2 estilos premium (Clásico y Moderno)',
     'Complementos de productos',
     'Soporte por email y WhatsApp',
     'Actualizaciones automáticas',
     'Analíticas básicas',
-    'Sin comisiones por venta',
+    // 'Sin comisiones por venta',
     'Instalación en 10 minutos'
   ];
 
@@ -84,13 +84,13 @@ const PricingHome = () => {
               <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-accent px-4 py-1.5 text-sm font-semibold text-white shadow-lg">
                 <Zap className="h-4 w-4" />
                 {/* <span>Más Popular</span> */}
-                <span>Gratis por tiempo limitado</span>
+                <span>Instalacion gratuita</span>
               </div>
             </div>
 
             <div className="bg-card border-2 border-primary/20 rounded-2xl p-8 md:p-12 shadow-xl hover:shadow-2xl transition-shadow">
               <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold mb-2">Plan Profesional</h3>
+                <h3 className="text-2xl font-bold mb-2">Empeza hoy</h3>
                 <p className="text-muted-foreground mb-6">
                   Todo lo que necesitás para aumentar tus ventas
                 </p>
@@ -98,16 +98,21 @@ const PricingHome = () => {
                 {/* Precio */}
                 <div className="mb-6">
                   {isAnnual && (
+                    <>
                     <div className="text-sm text-muted-foreground line-through mb-1">
                       ${monthlyPrice.toLocaleString('es-AR')}/mes
                     </div>
+</>
                   )}
                   <div className="flex items-baseline justify-center gap-2">
                     <span className="text-5xl font-bold">
                       ${isAnnual ? annualMonthlyPrice.toLocaleString('es-AR') : monthlyPrice.toLocaleString('es-AR')}
                     </span>
                     <span className="text-muted-foreground">/mes</span>
+
                   </div>
+                    <div>Pagas 3% de comisiones por venta generada por Tecnobundles.</div>
+
                   {isAnnual && (
                     <p className="text-sm text-muted-foreground mt-2">
                       Facturado ${annualPrice.toLocaleString('es-AR')} anualmente
@@ -127,7 +132,7 @@ const PricingHome = () => {
                   size="lg" 
                   className="w-full text-base font-semibold mb-4"
                 >
-                  Comenzar prueba gratuita
+                  Comenzar ahora
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 {/* <p className="text-xs text-muted-foreground">
@@ -153,12 +158,12 @@ const PricingHome = () => {
               </div>
 
               {/* Garantía */}
-              <div className="mt-8 pt-6 border-t text-center">
+              {/* <div className="mt-8 pt-6 border-t text-center">
                 <p className="text-sm text-muted-foreground">
                   <strong className="text-foreground">Garantía de 30 días:</strong> Si no estás satisfecho, 
                   te devolvemos tu dinero. Sin preguntas.
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
